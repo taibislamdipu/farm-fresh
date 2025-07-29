@@ -1,6 +1,6 @@
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
-import { dbConnect } from "@/dbConnect/mongo";
+import connectMongo from "@/dbConnect/mongo";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -21,7 +21,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  await dbConnect();
+  await connectMongo();
   return (
     <html lang="en">
       <body

@@ -1,9 +1,17 @@
-import { getProductById } from "@/database/queries";
+import { getAllProducts, getProductById } from "@/database/queries";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import Breadcrumb from "../Breadcrumb";
 import Quantity from "../Quantity";
+
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
 
 export default async function ProductDetails({ params: { id } }) {
   const product = await getProductById(id);
