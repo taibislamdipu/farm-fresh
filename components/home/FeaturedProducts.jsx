@@ -30,7 +30,9 @@ export default async function FeaturedProducts() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.slice(0, 8).map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <Link href={`/details/${product.id}`} key={product.id}>
+              <ProductCard product={product} />
+            </Link>
           ))}
         </div>
       </div>

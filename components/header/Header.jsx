@@ -3,6 +3,7 @@ import Logo from "../shared/Logo";
 import Cart from "./Cart";
 import DarkMode from "./DarkMode";
 import MobileMenu from "./MobileMenu";
+import NavLinks from "./NavLinks";
 import SearchProduct from "./Search";
 import UserMenu from "./UserMenu";
 
@@ -17,20 +18,19 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* <!-- Desktop Navigation --> */}
-          <div className="hidden md:flex items-center space-x-8">
+          {/* <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
               className="text-primary-600 dark:text-primary-400 font-medium"
             >
               Home
             </Link>
-            <a
-              href="products.html"
+            <Link
+              href="/products"
               className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
             >
               Products
-            </a>
+            </Link>
             <a
               href="farmers.html"
               className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
@@ -43,7 +43,8 @@ export default function Header() {
             >
               About
             </a>
-          </div>
+          </div> */}
+          <NavLinks />
 
           {/* <!-- User Actions --> */}
           <div className="flex items-center space-x-4">
