@@ -1,3 +1,9 @@
+import FeaturedProducts from "./FeaturedProducts";
+
 export default function HomePage() {
-  return <div>HomePage</div>;
+  return (
+    <div>
+      <FeaturedProducts />
+    </div>
+  );
 }
