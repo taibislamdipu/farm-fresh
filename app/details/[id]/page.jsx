@@ -1,27 +1,31 @@
 import { getProductById } from "@/database/queries";
+import Image from "next/image";
+import { FaStar } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
 import Breadcrumb from "../Breadcrumb";
+import Quantity from "../Quantity";
 
 export default async function ProductDetails({ params: { id } }) {
   const product = await getProductById(id);
-  console.log("product--->", product);
+
   return (
     <div>
       <Breadcrumb name={product.name} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* <!-- Product Images --> */}
           <div className="space-y-4">
             <div className="aspect-square bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
-              <img
+              <Image
                 id="mainImage"
-                src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&h=600&fit=crop"
+                src={product.image}
                 alt="Fresh Tomatoes"
                 className="w-full h-full object-cover"
+                width={600}
+                height={600}
               />
             </div>
 
-            {/* <!-- Thumbnail Images --> */}
             <div className="grid grid-cols-5 gap-2">
               <button className="aspect-square bg-white dark:bg-gray-800 rounded-lg overflow-hidden border-2 border-primary-500">
                 <img
@@ -74,12 +78,12 @@ export default async function ProductDetails({ params: { id } }) {
                 </span>
               </div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Fresh Tomatoes
+                {product.name}
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-400">
-                Produced by
+                Produced by{" "}
                 <span className="font-semibold text-primary-600 dark:text-primary-400">
-                  Rahim's Farm
+                  {product.harvestFrom}
                 </span>
               </p>
             </div>
@@ -87,12 +91,12 @@ export default async function ProductDetails({ params: { id } }) {
             {/* <!-- Rating and Reviews --> */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-1">
-                <div className="flex text-yellow-400">
-                  <i className="fas fa-star"></i>
-                  <i className="fas fa-star"></i>
-                  <i className="fas fa-star"></i>
-                  <i className="fas fa-star"></i>
-                  <i className="fas fa-star"></i>
+                <div className="flex items-center">
+                  <FaStar className="text-yellow-400" />
+                  <FaStar className="text-yellow-400" />
+                  <FaStar className="text-yellow-400" />
+                  <FaStar className="text-yellow-400" />
+                  <FaStar className="text-yellow-400" />
                 </div>
                 <span className="text-lg font-semibold text-gray-900 dark:text-white">
                   4.8
@@ -111,7 +115,7 @@ export default async function ProductDetails({ params: { id } }) {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <span className="text-3xl font-bold text-primary-600 dark:text-primary-400">
-                    ৳45
+                    ৳{product.pricePerUnit}
                   </span>
                   <span className="text-lg text-gray-500 dark:text-gray-400">
                     /kg
@@ -122,41 +126,19 @@ export default async function ProductDetails({ params: { id } }) {
                     Available Stock
                   </p>
                   <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                    50 kg
+                    {product.stock} kg
                   </p>
                 </div>
               </div>
 
               {/* <!-- Location --> */}
               <div className="flex items-center text-gray-600 dark:text-gray-400 mb-4">
-                <i className="fas fa-map-marker-alt mr-2"></i>
-                <span>Sylhet, Bangladesh</span>
+                <FaLocationDot className="mr-2" />
+                <span>{product.farmLocation}</span>
               </div>
             </div>
 
-            {/* <!-- Quantity and Date Selection --> */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Quantity (kg)
-                </label>
-                <div className="flex items-center space-x-3">
-                  <button className="w-10 h-10 rounded-lg border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i className="fas fa-minus text-sm"></i>
-                  </button>
-                  <input
-                    type="number"
-                    value="1"
-                    min="1"
-                    max="50"
-                    className="w-20 text-center py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                  />
-                  <button className="w-10 h-10 rounded-lg border border-gray-300 dark:border-gray-600 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <i className="fas fa-plus text-sm"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <Quantity />
 
             {/* <!-- Action Buttons --> */}
             <div className="space-y-3">
@@ -213,15 +195,10 @@ export default async function ProductDetails({ params: { id } }) {
 
           <div className="py-8">
             <div className="prose prose-lg max-w-none dark:prose-invert">
-              <h3>About This Product</h3>
-              <p>
-                Our fresh, organic tomatoes are grown with care in the fertile
-                soils of Sylhet. These vine-ripened tomatoes are picked at peak
-                freshness and delivered within 24 hours of harvest to ensure
-                maximum flavor and nutritional value.
-              </p>
+              <h3 className="font-semibold mb-1">About This Product</h3>
+              <p className="mt-2 mb-4">{product.description}</p>
 
-              <h4>Key Features:</h4>
+              <h4 className="font-semibold mt-6 mb-1">Key Features:</h4>
               <ul>
                 <li>100% Organic - No pesticides or chemical fertilizers</li>
                 <li>Vine-ripened for optimal taste and nutrition</li>
@@ -230,14 +207,16 @@ export default async function ProductDetails({ params: { id } }) {
                 <li>Perfect for salads, cooking, and sauces</li>
               </ul>
 
-              <h4>Storage Instructions:</h4>
+              <h4 className="font-semibold mt-6 mb-1">Storage Instructions:</h4>
               <p>
                 Store at room temperature for best flavor. Refrigerate only when
                 fully ripe to extend shelf life. Use within 5-7 days for optimal
                 freshness.
               </p>
 
-              <h4>Nutritional Information (per 100g):</h4>
+              <h4 className="font-semibold mt-6 mb-1">
+                Nutritional Information (per 100g):
+              </h4>
               <ul>
                 <li>Calories: 18</li>
                 <li>Vitamin C: 14mg</li>
