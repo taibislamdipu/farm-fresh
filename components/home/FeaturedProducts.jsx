@@ -1,9 +1,12 @@
 import { FaArrowRight } from "react-icons/fa";
 
+import { getAllProducts } from "@/database/queries";
 import Link from "next/link";
 import ProductCard from "./ProductCard";
 
-export default function FeaturedProducts() {
+export default async function FeaturedProducts() {
+  const products = await getAllProducts();
+
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +29,9 @@ export default function FeaturedProducts() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <ProductCard />
+          {products.slice(0, 8).map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </div>
       </div>
     </section>

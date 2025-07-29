@@ -3,15 +3,50 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: false,
+  },
+  category: {
+    type: String,
+    required: false,
+  },
+  pricePerUnit: {
+    type: Number,
+    required: false,
+  },
+  unit: {
+    type: String,
+    required: false,
+  },
+  description: {
+    type: String,
+    required: false,
+  },
+  farmLocation: {
+    type: String,
+    required: false,
+  },
+  harvestFrom: {
+    type: String,
+    required: false,
+  },
+  harvestDate: {
+    type: String,
+    required: false,
+  },
+  stock: {
+    type: Number,
+    required: false,
   },
   image: {
     type: String,
-    required: true,
+    required: false,
+  },
+  productFeatures: {
+    type: [String],
+    required: false,
   },
   label: {
     type: String,
-    enum: ["Organic", "New", "Sale", "Featured"], // you can extend this list
     default: null,
   },
   isFavorite: {
@@ -20,7 +55,7 @@ const productSchema = new mongoose.Schema({
   },
 });
 
-const Product =
-  mongoose.models.Product || mongoose.model("Product", productSchema);
+const productModel =
+  mongoose.models.products || mongoose.model("products", productSchema);
 
-export default Product;
+export default productModel;
