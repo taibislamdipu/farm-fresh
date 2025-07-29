@@ -18,35 +18,8 @@ export default function Header() {
             </Link>
           </div>
 
-          {/* <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/"
-              className="text-primary-600 dark:text-primary-400 font-medium"
-            >
-              Home
-            </Link>
-            <Link
-              href="/products"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
-            >
-              Products
-            </Link>
-            <a
-              href="farmers.html"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
-            >
-              Farmers
-            </a>
-            <a
-              href="about.html"
-              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
-            >
-              About
-            </a>
-          </div> */}
           <NavLinks />
 
-          {/* <!-- User Actions --> */}
           <div className="flex items-center space-x-4">
             <SearchProduct />
             <Cart />
