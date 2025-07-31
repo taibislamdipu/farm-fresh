@@ -15,7 +15,7 @@ export default function AddProductForm() {
 
     try {
       const formData = new FormData(e.currentTarget);
-      const productName = formData.get("productName");
+      const name = formData.get("name");
       const category = formData.get("category");
       const description = formData.get("description");
       const pricePerUnit = formData.get("pricePerUnit");

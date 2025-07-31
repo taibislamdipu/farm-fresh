@@ -1,5 +1,6 @@
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
+import Link from "next/link";
 import Logo from "../shared/Logo";
 
 export default function Footer() {
@@ -61,9 +62,9 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="create.html" className="hover:text-white">
+                <Link href="/create" className="hover:text-white">
                   Add Products
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="manageList.html" className="hover:text-white">
