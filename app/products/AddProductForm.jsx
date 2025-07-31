@@ -188,7 +188,7 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Product Images
           </h2>
@@ -226,7 +226,7 @@ export default function AddProductForm() {
               ></div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
