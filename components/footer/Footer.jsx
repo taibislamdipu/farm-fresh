@@ -1,6 +1,5 @@
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-
 import Link from "next/link";
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import Logo from "../shared/Logo";
 
 export default function Footer() {
@@ -15,15 +14,15 @@ export default function Footer() {
               farmers.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white">
+              <Link href="#" className="text-gray-400 hover:text-white">
                 <FaFacebook />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white">
+              </Link>
+              <Link href="#" className="text-gray-400 hover:text-white">
                 <FaTwitter />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white">
+              </Link>
+              <Link href="#" className="text-gray-400 hover:text-white">
                 <FaInstagram />
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -31,24 +30,24 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="index.html" className="hover:text-white">
+                <Link href="/" className="hover:text-white">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="products.html" className="hover:text-white">
+                <Link href="/products" className="hover:text-white">
                   Products
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="farmers.html" className="hover:text-white">
+                <Link href="/farmers" className="hover:text-white">
                   Farmers
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="about.html" className="hover:text-white">
+                <Link href="/about" className="hover:text-white">
                   About Us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -57,9 +56,9 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">For Farmers</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="register.html" className="hover:text-white">
+                <Link href="register" className="hover:text-white">
                   Join as Farmer
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/create" className="hover:text-white">
@@ -67,14 +66,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="manageList.html" className="hover:text-white">
+                <Link href="manageList" className="hover:text-white">
                   Manage Listings
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white">
+                <Link href="#" className="hover:text-white">
                   Farmer Support
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -83,24 +82,24 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="#" className="hover:text-white">
+                <Link href="#" className="hover:text-white">
                   Help Center
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white">
+                <Link href="#" className="hover:text-white">
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white">
+                <Link href="#" className="hover:text-white">
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white">
+                <Link href="#" className="hover:text-white">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
