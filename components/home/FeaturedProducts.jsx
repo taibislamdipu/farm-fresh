@@ -1,8 +1,7 @@
-import { FaArrowRight } from "react-icons/fa";
-
 import { getAllProducts } from "@/database/queries";
 import Link from "next/link";
-import ProductCard from "./ProductCard";
+import { FaArrowRight } from "react-icons/fa";
+import ProductCard from "../../app/products/ProductCard";
 
 export default async function FeaturedProducts() {
   const products = await getAllProducts();

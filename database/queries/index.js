@@ -14,6 +14,12 @@ export async function getAllProducts() {
   return replaceMongoIdInArray(products);
 }
 
+export async function getProductsByCategory(category) {
+  await connectMongo();
+  const products = await productModel.find({ category }).lean();
+  return replaceMongoIdInArray(products);
+}
+
 export async function getProductById(id) {
   await connectMongo();
 

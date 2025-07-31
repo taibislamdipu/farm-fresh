@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
       </div>
       <div className="p-6">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-semibold text-gray-900 dark:text-white capitalize">
             {product.name}
           </h3>
           <div className="flex items-center text-yellow-400">
