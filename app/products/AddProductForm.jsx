@@ -1,31 +1,59 @@
 "use client";
 
+import ButtonLoading from "@/components/shared/ButtonLoading";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function AddProductForm() {
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const formData = new FormData(event.currentTarget);
+      const formData = new FormData(e.currentTarget);
       const productName = formData.get("productName");
       const category = formData.get("category");
       const description = formData.get("description");
-      const image = formData.get("image");
-      const price = formData.get("price");
+      const pricePerUnit = formData.get("pricePerUnit");
       const quantity = formData.get("quantity");
 
-      console.log("productName--->", productName);
+      const res = await fetch("/api/product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productName,
+          category,
+          description,
+          pricePerUnit,
+          quantity,
+        }),
+      });
+
+      if (res.status === 201) {
+        toast.success("Product added successfully");
+        e.target.reset();
+      } else {
+        const data = await res.json();
+        setError(data.message || "Something went wrong");
+      }
     } catch (error) {
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <div>{error && <p className="text-red-500">{error}</p>}</div>
+      <div>
+        {error && <p className="text-red-500 p-8 space-y-8">{error}</p>}
+      </div>
       <form className="p-8 space-y-8" onSubmit={handleOnSubmit}>
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -105,8 +133,8 @@ export default function AddProductForm() {
               </label>
               <input
                 type="number"
-                id="price"
-                name="price"
+                id="pricePerUnit"
+                name="pricePerUnit"
                 step="0.01"
                 min="0"
                 required
@@ -158,7 +186,7 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Product Images
           </h2>
@@ -196,7 +224,7 @@ export default function AddProductForm() {
               ></div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -320,9 +348,10 @@ export default function AddProductForm() {
         <div>
           <button
             type="submit"
-            className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition"
+            disabled={loading}
+            className="w-full flex items-center justify-center bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition"
           >
-            Add Product
+            {loading ? <ButtonLoading /> : <span>Add Product</span>}
           </button>
         </div>
       </form>
