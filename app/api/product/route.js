@@ -5,13 +5,15 @@ import { NextResponse } from "next/server";
 export const POST = async (req, res) => {
   await connectMongo();
 
-  const { productName, category, description, pricePerUnit } = await req.json();
+  const { name, category, description, pricePerUnit, productFeatures } =
+    await req.json();
 
   const newProduct = {
-    name: productName,
+    name,
     category,
     pricePerUnit,
     description,
+    productFeatures,
   };
 
   try {

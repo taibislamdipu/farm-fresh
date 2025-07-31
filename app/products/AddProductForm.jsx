@@ -20,6 +20,7 @@ export default function AddProductForm() {
       const description = formData.get("description");
       const pricePerUnit = formData.get("pricePerUnit");
       const quantity = formData.get("quantity");
+      const productFeatures = formData.getAll("features");
 
       const res = await fetch("/api/product", {
         method: "POST",
@@ -27,11 +28,12 @@ export default function AddProductForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          productName,
+          name,
           category,
           description,
           pricePerUnit,
           quantity,
+          productFeatures,
         }),
       });
 
@@ -62,15 +64,15 @@ export default function AddProductForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label
-                htmlFor="productName"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 Product Name *
               </label>
               <input
                 type="text"
-                id="productName"
-                name="productName"
+                id="name"
+                name="name"
                 required
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                 placeholder="e.g., Organic Tomatoes"
@@ -273,7 +275,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="organic"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -282,7 +284,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="pesticide-free"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -291,7 +293,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="fresh"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -300,7 +302,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="non-gmo"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -309,7 +311,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="local"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -318,7 +320,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="sustainable"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -327,7 +329,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="fair-trade"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
@@ -336,7 +338,7 @@ export default function AddProductForm() {
             <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
-                name="features[]"
+                name="features"
                 value="gluten-free"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
