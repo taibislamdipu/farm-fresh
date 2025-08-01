@@ -7,6 +7,35 @@ import { toast } from "react-toastify";
 export default function AddProductForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState([]);
+  const [preview, setPreview] = useState([]);
+
+  const handleImageChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+
+    const totalFiles = images.length + selectedFiles.length;
+    if (totalFiles > 5) {
+      alert("You can upload a maximum of 5 images.");
+      return;
+    }
+
+    const newImages = [...images, ...selectedFiles];
+    setImages(newImages);
+
+    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+    setPreview((prev) => [...prev, ...newPreviews]);
+  };
+
+  const handleRemoveImage = (index) => {
+    const newImages = [...images];
+    const newPreview = [...preview];
+
+    newImages.splice(index, 1);
+    newPreview.splice(index, 1);
+
+    setImages(newImages);
+    setPreview(newPreview);
+  };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +44,7 @@ export default function AddProductForm() {
 
     try {
       const formData = new FormData(e.currentTarget);
+      images.forEach((image) => formData.append("images", image));
       const name = formData.get("name");
       const category = formData.get("category");
       const description = formData.get("description");
@@ -188,7 +218,8 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        {/* <div>
+        {/* images */}
+        <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Product Images
           </h2>
@@ -202,6 +233,7 @@ export default function AddProductForm() {
               </label>
               <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-primary-500 transition">
                 <input
+                  onChange={handleImageChange}
                   type="file"
                   id="images"
                   name="images"
@@ -222,11 +254,29 @@ export default function AddProductForm() {
               </div>
               <div
                 id="imagePreview"
-                className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-4 hidden"
-              ></div>
+                className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-4"
+              >
+                {preview.map((src, i) => (
+                  <div key={i} className="relative group">
+                    <img
+                      src={src}
+                      alt="preview"
+                      className="w-full h-32 object-cover border rounded"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(i)}
+                      className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                      title="Remove image"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
