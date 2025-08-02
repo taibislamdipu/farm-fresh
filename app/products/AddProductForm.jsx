@@ -2,7 +2,7 @@
 
 import ButtonLoading from "@/components/shared/ButtonLoading";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
 
@@ -11,6 +11,7 @@ export default function AddProductForm() {
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [preview, setPreview] = useState([]);
+  const fileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
     setError("");
@@ -77,6 +78,10 @@ export default function AddProductForm() {
 
     setImages(newImages);
     setPreview(newPreview);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -149,7 +154,7 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        {/* <div>
+        <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Pricing & Inventory
           </h2>
@@ -214,7 +219,7 @@ export default function AddProductForm() {
               />
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* images */}
         <div>
@@ -238,6 +243,7 @@ export default function AddProductForm() {
                 } rounded-lg p-6 text-center hover:border-primary-500 transition border-2 border-dashed`}
               >
                 <input
+                  ref={fileInputRef}
                   onChange={handleImageChange}
                   type="file"
                   id="images"
@@ -284,7 +290,7 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        {/* <div>
+        <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Farm Information
           </h2>
@@ -401,7 +407,7 @@ export default function AddProductForm() {
               <span className="ml-2 text-sm">Gluten-Free</span>
             </label>
           </div>
-        </div> */}
+        </div>
 
         <div>
           <button

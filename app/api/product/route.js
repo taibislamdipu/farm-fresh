@@ -9,11 +9,14 @@ export const POST = async (req) => {
   const formData = await req.formData();
 
   const name = formData.get("name");
-  const images = formData.getAll("images");
   const category = formData.get("category");
   const description = formData.get("description");
   const pricePerUnit = formData.get("pricePerUnit");
-  const quantity = formData.get("quantity");
+  const unit = formData.get("unit");
+  const stock = formData.get("stock");
+  const images = formData.getAll("images");
+  const farmLocation = formData.get("farmLocation");
+  const harvestDate = formData.get("harvestDate");
   const productFeatures = formData.getAll("features");
 
   const imageUrls = [];
@@ -36,11 +39,14 @@ export const POST = async (req) => {
 
   const newProduct = {
     name,
-    images: imageUrls,
     category,
     description,
     pricePerUnit,
-    quantity,
+    unit,
+    stock,
+    images: imageUrls,
+    farmLocation,
+    harvestDate,
     productFeatures,
   };
 
