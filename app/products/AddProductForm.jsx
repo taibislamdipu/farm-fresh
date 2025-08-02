@@ -1,7 +1,9 @@
 "use client";
 
 import ButtonLoading from "@/components/shared/ButtonLoading";
+import Image from "next/image";
 import { useState } from "react";
+import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
 
 export default function AddProductForm() {
@@ -11,6 +13,7 @@ export default function AddProductForm() {
   const [preview, setPreview] = useState([]);
 
   const handleImageChange = (e) => {
+    setError("");
     const selectedFiles = Array.from(e.target.files);
 
     const totalFiles = images.length + selectedFiles.length;
@@ -26,49 +29,31 @@ export default function AddProductForm() {
     setPreview((prev) => [...prev, ...newPreviews]);
   };
 
-  const handleRemoveImage = (index) => {
-    const newImages = [...images];
-    const newPreview = [...preview];
-
-    newImages.splice(index, 1);
-    newPreview.splice(index, 1);
-
-    setImages(newImages);
-    setPreview(newPreview);
-  };
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+
+    if (images.length === 0) {
+      setError("Please select at least one image.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
     try {
-      const formData = new FormData(e.currentTarget);
+      const formData = new FormData(e.target);
       images.forEach((image) => formData.append("images", image));
-      const name = formData.get("name");
-      const category = formData.get("category");
-      const description = formData.get("description");
-      const pricePerUnit = formData.get("pricePerUnit");
-      const quantity = formData.get("quantity");
-      const productFeatures = formData.getAll("features");
 
       const res = await fetch("/api/product", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          category,
-          description,
-          pricePerUnit,
-          quantity,
-          productFeatures,
-        }),
+        body: formData,
       });
 
+      const data = await res.json();
+      const { name } = data.product;
+
       if (res.status === 201) {
-        toast.success("Product added successfully");
+        toast.success(`Product ${name} added successfully`);
         e.target.reset();
       } else {
         const data = await res.json();
@@ -78,7 +63,20 @@ export default function AddProductForm() {
       setError(error.message);
     } finally {
       setLoading(false);
+      setPreview([]);
+      setImages([]);
     }
+  };
+
+  const handleRemoveImage = (index) => {
+    const newImages = [...images];
+    const newPreview = [...preview];
+
+    newImages.splice(index, 1);
+    newPreview.splice(index, 1);
+
+    setImages(newImages);
+    setPreview(newPreview);
   };
 
   return (
@@ -151,7 +149,7 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Pricing & Inventory
           </h2>
@@ -216,7 +214,7 @@ export default function AddProductForm() {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* images */}
         <div>
@@ -231,15 +229,20 @@ export default function AddProductForm() {
               >
                 Upload Images (Max 5 images) *
               </label>
-              <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-primary-500 transition">
+              {error && <p className="text-sm text-red-500 pb-2">{error}</p>}
+              <div
+                className={`${
+                  error
+                    ? "border-red-400"
+                    : "border-gray-300 dark:border-gray-600"
+                } rounded-lg p-6 text-center hover:border-primary-500 transition border-2 border-dashed`}
+              >
                 <input
                   onChange={handleImageChange}
                   type="file"
                   id="images"
-                  name="images"
                   multiple
                   accept="image/*"
-                  required
                   className="hidden"
                 />
                 <label htmlFor="images" className="cursor-pointer">
@@ -252,16 +255,19 @@ export default function AddProductForm() {
                   </p>
                 </label>
               </div>
+
               <div
                 id="imagePreview"
                 className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-4"
               >
                 {preview.map((src, i) => (
                   <div key={i} className="relative group">
-                    <img
+                    <Image
                       src={src}
                       alt="preview"
                       className="w-full h-32 object-cover border rounded"
+                      width={128}
+                      height={128}
                     />
                     <button
                       type="button"
@@ -269,7 +275,7 @@ export default function AddProductForm() {
                       className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
                       title="Remove image"
                     >
-                      ✕
+                      <IoMdClose size={23} />
                     </button>
                   </div>
                 ))}
@@ -278,7 +284,7 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Farm Information
           </h2>
@@ -395,7 +401,7 @@ export default function AddProductForm() {
               <span className="ml-2 text-sm">Gluten-Free</span>
             </label>
           </div>
-        </div>
+        </div> */}
 
         <div>
           <button

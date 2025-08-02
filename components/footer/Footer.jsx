@@ -62,7 +62,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/create" className="hover:text-white">
-                  Add Products ddd
+                  Add Products
                 </Link>
               </li>
               <li>
