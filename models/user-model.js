@@ -36,10 +36,16 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "farmer"],
-    default: "user",
+    enum: ["customer", "farmer"],
+    default: "customer",
     required: false,
   },
+  termsAccepted: {
+    type: Boolean,
+    required: true,
+    default: false, // Optional: helps avoid unexpected `undefined`
+  },
+
   // only for farmer
   farmName: {
     type: String,
@@ -50,6 +56,10 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
   farmSize: {
+    type: String,
+    required: false,
+  },
+  farmSizeUnit: {
     type: String,
     required: false,
   },
