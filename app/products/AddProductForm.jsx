@@ -221,7 +221,6 @@ export default function AddProductForm() {
           </div>
         </div>
 
-        {/* images */}
         <div>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
             Product Images
