@@ -1,11 +1,13 @@
-// "use client";
-
+import SidebarFilter from "@/components/filter/SidebarFilter";
+import { getAllProducts } from "@/database/queries";
 import { Suspense } from "react";
 import Pagination from "./Pagination";
+import ProductCard from "./ProductCard";
 import ProductSort from "./ProductSort";
-import SidebarFilter from "./SidebarFilter";
 
 export default async function ProductsPage() {
+  const products = await getAllProducts();
+
   return (
     <div>
       <div className="bg-primary-600 text-white py-12">
@@ -27,7 +29,9 @@ export default async function ProductsPage() {
             <ProductSort />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* <ProductCard /> */}
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
 
             <Pagination />
