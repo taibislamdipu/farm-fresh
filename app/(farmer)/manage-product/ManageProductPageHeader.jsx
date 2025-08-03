@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { MdAdd } from "react-icons/md";
+
 export default function ManageProductPageHeader() {
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -9,13 +12,13 @@ export default function ManageProductPageHeader() {
           Manage your product listings and inventory
         </p>
       </div>
-      <a
-        href="create.html"
+      <Link
+        href="/create"
         className="mt-4 sm:mt-0 inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition"
       >
-        <i className="fas fa-plus mr-2"></i>
+        <MdAdd size={24} className="mr-2" />
         Add New Product
-      </a>
+      </Link>
     </div>
   );
 }

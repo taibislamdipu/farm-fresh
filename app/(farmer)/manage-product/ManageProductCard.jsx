@@ -1,4 +1,4 @@
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaHeart } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 export default function ManageProductCard() {
@@ -17,7 +17,7 @@ export default function ManageProductCard() {
         </div>
         <div className="absolute top-3 right-3">
           <button className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-            <i className="fas fa-heart text-red-500"></i>
+            <FaHeart className="text-red-500" />
           </button>
         </div>
       </div>

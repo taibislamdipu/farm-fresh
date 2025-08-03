@@ -36,3 +36,9 @@ export async function getProductById(id) {
 
   return replaceMongoIdInObject(product);
 }
+
+export async function getAllProductsByFarmerId(farmerId) {
+  await connectMongo();
+  const products = await productModel.find({ farmerId }).lean();
+  return replaceMongoIdInArray(products);
+}
