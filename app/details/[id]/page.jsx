@@ -18,9 +18,15 @@ export async function generateStaticParams() {
 export default async function ProductDetails({ params: { id } }) {
   const product = await getProductById(id);
 
+  const breadcrumbItems = [
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/products" },
+    { label: product?.name },
+  ];
+
   return (
     <div>
-      <Breadcrumb name={product.name} />
+      <Breadcrumb items={breadcrumbItems} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -28,7 +34,7 @@ export default async function ProductDetails({ params: { id } }) {
             <div className="aspect-square bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
               <Image
                 id="mainImage"
-                src={product.image}
+                src={product?.images?.[0]}
                 alt="Fresh Tomatoes"
                 className="w-full h-full object-cover"
                 width={600}
