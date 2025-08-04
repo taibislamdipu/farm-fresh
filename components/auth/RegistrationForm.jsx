@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCamera, FaTractor, FaUser } from "react-icons/fa";
 import { toast } from "react-toastify";
 import ImageAvatar from "../../public/assets/profile-placeholder-image.jpg";
@@ -74,6 +74,15 @@ export default function RegistrationForm() {
     // you can now send data to your API/backend
   };
 
+  // Clean up memory when component unmounts
+  useEffect(() => {
+    return () => {
+      if (profilePreview) {
+        URL.revokeObjectURL(profilePreview);
+      }
+    };
+  }, [profilePreview]);
+
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
       {/* Account type */}
@@ -145,6 +154,13 @@ export default function RegistrationForm() {
                 type="file"
                 className="sr-only"
                 accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const previewURL = URL.createObjectURL(file);
+                    setProfilePreview(previewURL);
+                  }
+                }}
               />
             </label>
             <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 text-center">
