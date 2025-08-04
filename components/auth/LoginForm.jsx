@@ -4,6 +4,8 @@ import { login } from "@/app/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaEye, FaLock } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 import SocialLogin from "./SocialLogin";
 
 export default function LoginForm() {
@@ -49,7 +51,10 @@ export default function LoginForm() {
               className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               placeholder="john@example.com"
             />
-            <i className="fas fa-envelope absolute left-3 top-3.5 text-gray-400"></i>
+            <MdEmail
+              className="absolute left-3 top-3.5 text-gray-400"
+              size={24}
+            />
           </div>
         </div>
 
@@ -69,12 +74,16 @@ export default function LoginForm() {
               className="w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               placeholder="••••••••"
             />
-            <i className="fas fa-lock absolute left-3 top-3.5 text-gray-400"></i>
+
+            <FaLock
+              className="absolute left-3 top-3.5 text-gray-400"
+              size={24}
+            />
             <button
               type="button"
               className="absolute inset-y-0 right-0 pr-3 flex items-center"
             >
-              <i className="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+              <FaEye className="text-gray-400 hover:text-gray-600" size={24} />
             </button>
           </div>
         </div>
