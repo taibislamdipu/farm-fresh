@@ -18,23 +18,6 @@ export default function RegistrationForm() {
     setUserType(e.target.value);
   };
 
-  const handleProfileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        alert("Please select an image file.");
-        return;
-      }
-      if (file.size > 2 * 1024 * 1024) {
-        alert("Please select an image smaller than 2MB.");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (e) => setProfilePreview(e.target.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleBioInput = (e) => {
     setBioLength(e.target.value.length);
   };
