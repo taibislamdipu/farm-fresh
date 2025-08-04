@@ -3,12 +3,15 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { FaCamera, FaTractor, FaUser } from "react-icons/fa";
+import { toast } from "react-toastify";
 import ImageAvatar from "../../public/assets/profile-placeholder-image.jpg";
+import ButtonLoading from "../shared/ButtonLoading";
 
 export default function RegistrationForm() {
   const [userType, setUserType] = useState("customer");
   const [profilePreview, setProfilePreview] = useState(null);
   const [bioLength, setBioLength] = useState(0);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
 
   const handleUserTypeChange = (e) => {
@@ -36,8 +39,9 @@ export default function RegistrationForm() {
     setBioLength(e.target.value.length);
   };
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.target;
     const formData = new FormData(form);
 
@@ -46,25 +50,49 @@ export default function RegistrationForm() {
       return;
     }
 
-    if (userType === "farmer") {
-      if (!formData.get("farmName").trim()) {
-        alert("Farm name is required for farmers.");
-        return;
+    // if (userType === "farmer") {
+    //   if (!formData.get("farmName").trim()) {
+    //     alert("Farm name is required for farmers.");
+    //     return;
+    //   }
+    //   if (!formData.get("specialization")) {
+    //     alert("Please select your farming specialization.");
+    //     return;
+    //   }
+    // }
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        body: formData,
+      });
+
+      const uploadedData = await res.json();
+
+      if (res.status === 201) {
+        toast.success("Account created successfully");
+      } else {
+        const data = await res.json();
+        setError(data.message || "Something went wrong");
       }
-      if (!formData.get("specialization")) {
-        alert("Please select your farming specialization.");
-        return;
-      }
+
+      console.log("uploadedData--->", uploadedData);
+    } catch (error) {
+      console.error("error--->", error);
+    } finally {
+      setLoading(false);
     }
 
     const data = {};
+
     formData.forEach((v, k) => (data[k] = v));
+
     console.log("Form Data:", data);
     // you can now send data to your API/backend
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleFormSubmit} className="space-y-6">
       {/* Account type */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
@@ -150,7 +178,7 @@ export default function RegistrationForm() {
           {/* First Name */}
           <div>
             <label
-              htmlhtmlFor="firstName"
+              htmlFor="firstName"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               First Name
@@ -168,7 +196,7 @@ export default function RegistrationForm() {
           {/* Email */}
           <div>
             <label
-              htmlhtmlFor="email"
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Email
@@ -186,7 +214,7 @@ export default function RegistrationForm() {
           {/* Address */}
           <div>
             <label
-              htmlhtmlFor="address"
+              htmlFor="address"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Address
@@ -203,7 +231,7 @@ export default function RegistrationForm() {
           {/* Password */}
           <div>
             <label
-              htmlhtmlFor="password"
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Password
@@ -223,7 +251,7 @@ export default function RegistrationForm() {
         <div className="space-y-4">
           <div>
             <label
-              htmlhtmlFor="lastName"
+              htmlFor="lastName"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Last Name
@@ -240,7 +268,7 @@ export default function RegistrationForm() {
 
           <div>
             <label
-              htmlhtmlFor="phone"
+              htmlFor="phone"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Phone Number
@@ -257,7 +285,7 @@ export default function RegistrationForm() {
 
           <div>
             <label
-              htmlhtmlFor="bio"
+              htmlFor="bio"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Bio
@@ -284,7 +312,7 @@ export default function RegistrationForm() {
 
           <div>
             <label
-              htmlhtmlFor="confirmPassword"
+              htmlFor="confirmPassword"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Confirm Password
@@ -306,7 +334,7 @@ export default function RegistrationForm() {
         <div className="space-y-4">
           <div>
             <label
-              htmlhtmlFor="farmName"
+              htmlFor="farmName"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Farm Name
@@ -315,14 +343,14 @@ export default function RegistrationForm() {
               id="farmName"
               name="farmName"
               type="text"
-              required
+              // required
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
               placeholder="Green Valley Farm"
             />
           </div>
           <div>
             <label
-              htmlhtmlFor="specialization"
+              htmlFor="specialization"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
               Specialization
@@ -330,7 +358,7 @@ export default function RegistrationForm() {
             <select
               id="specialization"
               name="specialization"
-              required
+              // required
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
             >
               <option value="">Select specialization</option>
@@ -402,9 +430,14 @@ export default function RegistrationForm() {
 
       <button
         type="submit"
-        className="w-full bg-primary-600 text-white py-3 rounded"
+        className="w-full bg-primary-600 text-white py-3 rounded flex items-center justify-center"
+        disabled={loading}
       >
-        Create Account
+        {loading ? (
+          <ButtonLoading loadingText="Creating Account" />
+        ) : (
+          <span>Create Account</span>
+        )}
       </button>
     </form>
   );

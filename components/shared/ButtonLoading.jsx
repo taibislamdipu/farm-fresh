@@ -1,4 +1,4 @@
-export default function ButtonLoading() {
+export default function ButtonLoading({ loadingText }) {
   return (
     <div role="status" className="flex items-center gap-2">
       <svg
@@ -17,7 +17,7 @@ export default function ButtonLoading() {
           fill="currentFill"
         />
       </svg>
-      <span>Loading...</span>
+      <span>{loadingText ? loadingText : "Loading..."}</span>
     </div>
   );
 }

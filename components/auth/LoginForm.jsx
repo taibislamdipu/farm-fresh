@@ -1,20 +1,37 @@
 "use client";
 
+import { login } from "@/app/actions";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import SocialLogin from "./SocialLogin";
 
 export default function LoginForm() {
-  const onSubmit = (e) => {
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  async function onSubmit(e) {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
+    try {
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+      const res = await login(data);
 
-    console.log(data);
-  };
+      if (!!res.error) {
+        setError(res.error.message);
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  }
 
   return (
     <div className="bg-white dark:bg-gray-800 py-8 px-6 shadow-xl rounded-2xl">
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+
       <form className="space-y-6" onSubmit={onSubmit}>
         <div>
           <label

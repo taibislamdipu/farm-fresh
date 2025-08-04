@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  role: {
+  userType: {
     type: String,
     enum: ["customer", "farmer"],
     default: "customer",
@@ -64,3 +64,6 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
 });
+
+const userModel = mongoose.models.users || mongoose.model("users", userSchema);
+export default userModel;
