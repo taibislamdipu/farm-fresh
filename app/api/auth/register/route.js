@@ -8,8 +8,11 @@ export const POST = async (req) => {
 
   const formData = await req.formData();
   const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+  const email = formData.get("email");
   const userType = formData.get("userType");
   const profilePicture = formData.get("profilePicture");
+  const password = formData.get("password");
 
   let imageUrl = "";
 
@@ -28,7 +31,15 @@ export const POST = async (req) => {
     imageUrl = uploadResult.secure_url;
   }
 
-  const newUser = { firstName, userType, profilePicture: imageUrl };
+  const newUser = {
+    firstName,
+    lastName,
+    name: `${firstName} ${lastName}`,
+    userType,
+    profilePicture: imageUrl,
+    email,
+    password,
+  };
 
   try {
     await userModel.create(newUser);

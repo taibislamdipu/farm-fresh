@@ -1,6 +1,8 @@
-"use server";
+// "use server";
 
-import { signIn } from "@/auth";
+import { signIn } from "next-auth/react";
+
+// import { signIn } from "@/auth";
 
 export async function login(data) {
   try {
