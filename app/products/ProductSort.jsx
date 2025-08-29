@@ -1,3 +1,6 @@
+import { MdGridOn } from "react-icons/md";
+import { TfiMenuAlt } from "react-icons/tfi";
+
 export default function ProductSort() {
   return (
     <div className="flex justify-between items-center mb-6">
@@ -14,10 +17,10 @@ export default function ProductSort() {
         </select>
         <div className="flex border border-gray-300 dark:border-gray-600 rounded-lg">
           <button className="p-2 bg-primary-600 text-white rounded-l-lg">
-            <i className="fas fa-th"></i>
+            <MdGridOn size={24} />
           </button>
           <button className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-r-lg">
-            <i className="fas fa-list"></i>
+            <TfiMenuAlt size={24} />
           </button>
         </div>
       </div>
