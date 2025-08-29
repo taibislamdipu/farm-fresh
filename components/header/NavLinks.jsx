@@ -10,12 +10,12 @@ export default function NavLinks() {
     "hover:text-primary-600 dark:hover:text-primary-400 transition";
 
   return (
-    <div className="hidden md:flex items-center space-x-8">
+    <div className="hidden items-center space-x-8 md:flex">
       <Link
         href="/"
         className={`${
           pathname === "/"
-            ? "text-primary-600 dark:text-primary-400 font-medium"
+            ? "dark:text-primary-400 font-medium text-primary-600"
             : "text-gray-700 dark:text-gray-300"
         } ${baseClass}`}
       >
@@ -26,7 +26,7 @@ export default function NavLinks() {
         href="/products"
         className={`${
           pathname === "/products"
-            ? "text-primary-600 dark:text-primary-400 font-medium"
+            ? "dark:text-primary-400 font-medium text-primary-600"
             : "text-gray-700 dark:text-gray-300"
         } ${baseClass}`}
       >
@@ -41,7 +41,7 @@ export default function NavLinks() {
       </Link>
 
       <Link
-        href="about.html"
+        href="/about"
         className={`text-gray-700 dark:text-gray-300 ${baseClass}`}
       >
         About
