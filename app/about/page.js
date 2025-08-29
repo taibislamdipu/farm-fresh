@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaEnvelope, FaUserPlus } from "react-icons/fa";
 import { FaHandshakeSimple, FaLeaf } from "react-icons/fa6";
 import { SlBadge } from "react-icons/sl";
@@ -210,13 +211,13 @@ export default function AboutPage() {
               <FaEnvelope size={24} className="mr-2" />
               Contact Us
             </a>
-            <a
-              href="/registration"
+            <Link
+              href="/registration?type=farmer"
               className="inline-flex items-center justify-center rounded-lg border border-primary-600 px-6 py-3 font-medium text-primary-600 transition hover:bg-primary-50 dark:hover:bg-primary-900"
             >
               <FaUserPlus size={24} className="mr-2" />
               Join as Farmer
-            </a>
+            </Link>
           </div>
         </div>
       </div>
