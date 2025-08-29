@@ -1,37 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌾 FarmFresh
 
-## Getting Started
+FarmFresh is a full-stack e-commerce platform built as the **final project** of the Reactive Accelerator course.  
+It allows users to buy fresh farm products directly from farmers, manage orders, and experience a complete e-commerce flow with authentication, product management, payments, and reviews.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🔑 Authentication
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+- JWT-based authentication with **Access & Refresh tokens**
+- Social login using **Google OAuth**
+- Secure password reset via email
+- Parallel & intercepting routes for **Login / Signup modals**
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### 🏠 User Features
 
-## Learn More
+- Browse products with **search & filtering**
+- Shop by category
+- View featured & related products
+- Add to **Cart** and **Favourites**
+- Write, edit, and delete **reviews**
+- SEO-friendly product pages with OpenGraph support
+- Checkout with **fake payment simulation**
+- Download and receive **PDF invoices** via email
+- Manage orders: view, reorder, cancel, and review
 
-To learn more about Next.js, take a look at the following resources:
+### 👨‍🌾 Farmer Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Add new products
+- Manage products (edit, publish/unpublish, delete, search, filter)
+- View orders for own products
+- Update product order status: `Pending → Confirmed → Shipped → Delivered → Canceled`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 🛠️ Additional Pages
 
-## Deploy on Vercel
+- **Cart Page** (custom built)
+- **Favourites Page**
+- **Farmers Directory**
+- **Bookings Page** (order history for both farmers & users)
+- Success & Payment pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# farm-fresh
+## 🧭 Navbar (Dynamic)
+
+- **Guest**: Home, Products, Farmers, About, Login, Signup
+- **User**: Home, Products, Farmers, My Orders, About, Logout
+- **Farmer**: Home, Add Product, Manage Products, About, Logout
+
+---
+
+## 📂 Tech Stack
+
+- **Frontend**: Next.js, React, Tailwind CSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB Atlas
+- **Authentication**: JWT (Access & Refresh), Google OAuth
+- **Email & PDF**: Nodemailer, PDFKit
+- **Deployment**: Vercel (Frontend) + Render/Heroku (Backend)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js >= 18
+- MongoDB Atlas account
+- Google OAuth credentials

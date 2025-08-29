@@ -8,7 +8,7 @@ import userModel from "./models/user-model";
 export const {
   handlers: { GET, POST },
   auth,
-  singIn,
+  signIn,
   signOut,
 } = NextAuth({
   adapter: MongoDBAdapter(mongoClientPromise, {
@@ -50,4 +50,22 @@ export const {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+
+  // 🔥 Add callbacks to inject custom user data into session
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.profilePicture = user.profilePicture || null;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.profilePicture = token.profilePicture;
+      }
+      return session;
+    },
+  },
 });
