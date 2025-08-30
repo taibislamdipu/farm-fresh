@@ -4,6 +4,7 @@ import Link from "next/link";
 import RegistrationPageHeader from "./RegistrationPageHeader";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function RegistrationPage() {
   const searchParams = useSearchParams();
@@ -16,7 +17,9 @@ export default function RegistrationPage() {
 
         <div className="mx-auto max-w-4xl">
           <div className="rounded-2xl bg-white px-8 py-8 shadow-xl dark:bg-gray-800">
-            <RegistrationForm type={type} />
+            <Suspense>
+              <RegistrationForm type={type} />
+            </Suspense>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
