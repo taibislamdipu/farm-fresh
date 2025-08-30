@@ -9,8 +9,9 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h1 className="mb-6 text-5xl font-bold">About FarmFresh</h1>
           <p className="mx-auto max-w-3xl text-xl text-primary-100">
-            We're on a mission to connect communities with fresh, local produce
-            while supporting sustainable farming practices across Bangladesh.
+            We`&apos;`re on a mission to connect communities with fresh, local
+            produce while supporting sustainable farming practices across
+            Bangladesh.
           </p>
         </div>
       </div>
