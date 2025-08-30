@@ -8,7 +8,7 @@ import ImageAvatar from "../../public/assets/profile-placeholder-image.jpg";
 import ButtonLoading from "../shared/ButtonLoading";
 
 export default function RegistrationForm({ type }) {
-  const [userType, setUserType] = useState(type ? type : "customer");
+  const [userType, setUserType] = useState("customer");
   const [profilePreview, setProfilePreview] = useState(null);
   const [bioLength, setBioLength] = useState(0);
   const [loading, setLoading] = useState(false);
