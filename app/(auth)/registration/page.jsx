@@ -17,7 +17,7 @@ export default function RegistrationPage() {
 
         <div className="mx-auto max-w-4xl">
           <div className="rounded-2xl bg-white px-8 py-8 shadow-xl dark:bg-gray-800">
-            <Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
               <RegistrationForm type={type} />
             </Suspense>
 
