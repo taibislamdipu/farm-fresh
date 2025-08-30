@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 
 export async function getAllProducts() {
   await connectMongo();
-  const products = await productModel.find().lean();
+  const products = await productModel.find().sort({ _id: -1 }).lean();
   return replaceMongoIdInArray(products);
 }
 

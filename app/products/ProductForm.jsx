@@ -2,11 +2,11 @@
 
 import ButtonLoading from "@/components/shared/ButtonLoading";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
 
-export default function AddProductForm() {
+export default function ProductForm({ product }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
@@ -84,21 +84,27 @@ export default function AddProductForm() {
     }
   };
 
+  useEffect(() => {
+    if (product?.images) {
+      setPreview(product.images); // Show existing images
+    }
+  }, [product]);
+
   return (
     <>
       <div>
-        {error && <p className="text-red-500 p-8 space-y-8">{error}</p>}
+        {error && <p className="space-y-8 p-8 text-red-500">{error}</p>}
       </div>
-      <form className="p-8 space-y-8" onSubmit={handleOnSubmit}>
+      <form className="space-y-8 p-8" onSubmit={handleOnSubmit}>
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
             Basic Information
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Product Name *
               </label>
@@ -106,8 +112,9 @@ export default function AddProductForm() {
                 type="text"
                 id="name"
                 name="name"
+                defaultValue={product?.name}
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 placeholder="e.g., Organic Tomatoes"
               />
             </div>
@@ -115,15 +122,16 @@ export default function AddProductForm() {
             <div>
               <label
                 htmlFor="category"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Category *
               </label>
               <select
+                defaultValue={product?.category}
                 id="category"
                 name="category"
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Select Category</option>
                 <option value="vegetables">Vegetables</option>
@@ -138,16 +146,17 @@ export default function AddProductForm() {
             <div className="md:col-span-2">
               <label
                 htmlFor="description"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Description *
               </label>
               <textarea
+                defaultValue={product?.description}
                 id="description"
                 name="description"
                 rows="4"
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 placeholder="Describe your product, growing methods, quality, etc."
               ></textarea>
             </div>
@@ -155,25 +164,26 @@ export default function AddProductForm() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
             Pricing & Inventory
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div>
               <label
                 htmlFor="price"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Price per Unit (৳) *
               </label>
               <input
+                defaultValue={product?.pricePerUnit}
                 type="number"
                 id="pricePerUnit"
                 name="pricePerUnit"
                 step="0.01"
                 min="0"
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 placeholder="45.00"
               />
             </div>
@@ -181,15 +191,16 @@ export default function AddProductForm() {
             <div>
               <label
                 htmlFor="unit"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Unit *
               </label>
               <select
+                defaultValue={product?.unit}
                 id="unit"
                 name="unit"
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               >
                 <option value="">Select Unit</option>
                 <option value="kg">Kilogram (kg)</option>
@@ -204,17 +215,18 @@ export default function AddProductForm() {
             <div>
               <label
                 htmlFor="stock"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Available Stock *
               </label>
               <input
+                defaultValue={product?.stock}
                 type="number"
                 id="stock"
                 name="stock"
                 min="0"
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 placeholder="100"
               />
             </div>
@@ -222,24 +234,24 @@ export default function AddProductForm() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
             Product Images
           </h2>
           <div className="space-y-4">
             <div>
               <label
                 htmlFor="images"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Upload Images (Max 5 images) *
               </label>
-              {error && <p className="text-sm text-red-500 pb-2">{error}</p>}
+              {error && <p className="pb-2 text-sm text-red-500">{error}</p>}
               <div
                 className={`${
                   error
                     ? "border-red-400"
                     : "border-gray-300 dark:border-gray-600"
-                } rounded-lg p-6 text-center hover:border-primary-500 transition border-2 border-dashed`}
+                } rounded-lg border-2 border-dashed p-6 text-center transition hover:border-primary-500`}
               >
                 <input
                   ref={fileInputRef}
@@ -251,7 +263,7 @@ export default function AddProductForm() {
                   className="hidden"
                 />
                 <label htmlFor="images" className="cursor-pointer">
-                  <i className="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                  <i className="fas fa-cloud-upload-alt mb-4 text-4xl text-gray-400"></i>
                   <p className="text-lg font-medium text-gray-900 dark:text-white">
                     Click to upload images
                   </p>
@@ -263,21 +275,21 @@ export default function AddProductForm() {
 
               <div
                 id="imagePreview"
-                className="mt-4 grid grid-cols-2 md:grid-cols-5 gap-4"
+                className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-5"
               >
                 {preview.map((src, i) => (
-                  <div key={i} className="relative group">
+                  <div key={i} className="group relative">
                     <Image
                       src={src}
                       alt="preview"
-                      className="w-full h-32 object-cover border rounded"
+                      className="h-32 w-full rounded border object-cover"
                       width={128}
                       height={128}
                     />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(i)}
-                      className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+                      className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black bg-opacity-50 text-xs text-white opacity-0 transition group-hover:opacity-100"
                       title="Remove image"
                     >
                       <IoMdClose size={23} />
@@ -290,23 +302,24 @@ export default function AddProductForm() {
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
             Farm Information
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label
                 htmlFor="farmLocation"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Farm Location *
               </label>
               <input
+                defaultValue={product?.farmLocation}
                 type="text"
                 id="farmLocation"
                 name="farmLocation"
                 required
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 placeholder="e.g., Sylhet, Bangladesh"
               />
             </div>
@@ -314,26 +327,27 @@ export default function AddProductForm() {
             <div>
               <label
                 htmlFor="harvestDate"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+                className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Harvest Date
               </label>
               <input
+                defaultValue={product?.harvestDate}
                 type="date"
                 id="harvestDate"
                 name="harvestDate"
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               />
             </div>
           </div>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
             Product Features
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -342,7 +356,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Organic</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -351,7 +365,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Pesticide Free</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -360,7 +374,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Fresh</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -369,7 +383,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Non-GMO</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -378,7 +392,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Local</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -387,7 +401,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Sustainable</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -396,7 +410,7 @@ export default function AddProductForm() {
               />
               <span className="ml-2 text-sm">Fair Trade</span>
             </label>
-            <label className="flex items-center p-3 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700">
+            <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
               <input
                 type="checkbox"
                 name="features"
@@ -412,9 +426,13 @@ export default function AddProductForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition"
+            className="flex w-full items-center justify-center rounded-lg bg-primary-600 py-3 font-semibold text-white transition hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
-            {loading ? <ButtonLoading /> : <span>Add Product</span>}
+            {loading ? (
+              <ButtonLoading />
+            ) : (
+              <span>{product ? "Update Product" : "Add Product"}</span>
+            )}
           </button>
         </div>
       </form>

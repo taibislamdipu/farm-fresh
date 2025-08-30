@@ -170,7 +170,7 @@ export default function PaymentPage() {
               <div id="cardDetails" className="space-y-4">
                 <div>
                   <label
-                    for="cardName"
+                    htmlFor="cardName"
                     className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Name on Card
@@ -187,7 +187,7 @@ export default function PaymentPage() {
 
                 <div>
                   <label
-                    for="cardNumber"
+                    htmlFor="cardNumber"
                     className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Card Number
@@ -205,7 +205,7 @@ export default function PaymentPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label
-                      for="expiry"
+                      htmlFor="expiry"
                       className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                       Expiry Date
@@ -221,7 +221,7 @@ export default function PaymentPage() {
                   </div>
                   <div>
                     <label
-                      for="cvv"
+                      htmlFor="cvv"
                       className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
                       CVV
@@ -243,7 +243,7 @@ export default function PaymentPage() {
               <div id="mobileDetails" className="hidden space-y-4">
                 <div>
                   <label
-                    for="mobileNumber"
+                    htmlFor="mobileNumber"
                     className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Mobile Number
