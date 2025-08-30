@@ -6,8 +6,10 @@ import Pagination from "./Pagination";
 import ProductCard from "./ProductCard";
 import ProductSort from "./ProductSort";
 
-export default async function ProductsPage() {
-  const products = await getAllProducts();
+export default async function ProductsPage({ searchParams }) {
+  const page = parseInt(searchParams?.page) || 1;
+  const { products, total } = await getAllProducts({ page, limit: 6 });
+  const totalPages = Math.ceil(total / 6);
 
   return (
     <div>
@@ -37,7 +39,7 @@ export default async function ProductsPage() {
               ))}
             </div>
 
-            <Pagination />
+            <Pagination page={page} totalPages={totalPages} />
           </div>
         </div>
       </div>

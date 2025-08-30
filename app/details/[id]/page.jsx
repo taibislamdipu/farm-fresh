@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { getAllProducts, getProductById } from "@/database/queries";
+import { getProductById } from "@/database/queries";
+import connectMongo from "@/dbConnect/mongo";
+import productModel from "@/models/product-model";
 import Image from "next/image";
 import Link from "next/link";
 import { FaBolt, FaStar } from "react-icons/fa";
@@ -9,10 +11,12 @@ import Quantity from "../Quantity";
 import RelatedProducts from "../RelatedProducts";
 
 export async function generateStaticParams() {
-  const products = await getAllProducts();
+  await connectMongo();
+
+  const products = await productModel.find({}, { _id: 1 }).lean();
 
   return products.map((product) => ({
-    id: product.id,
+    id: product._id.toString(),
   }));
 }
 

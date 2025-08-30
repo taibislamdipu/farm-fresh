@@ -8,10 +8,24 @@ import {
 } from "@/utils/data-util";
 import mongoose from "mongoose";
 
-export async function getAllProducts() {
+export async function getAllProducts({ page = 1, limit = 6 }) {
   await connectMongo();
-  const products = await productModel.find().sort({ _id: -1 }).lean();
-  return replaceMongoIdInArray(products);
+
+  const skip = (page - 1) * limit;
+
+  const products = await productModel
+    .find()
+    .sort({ _id: -1 }) // newest first
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  const total = await productModel.countDocuments();
+
+  return {
+    products: replaceMongoIdInArray(products),
+    total,
+  };
 }
 
 export async function getProductsByCategory(category) {

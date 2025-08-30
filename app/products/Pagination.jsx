@@ -1,58 +1,60 @@
+"use client";
 import Link from "next/link";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-export default function Pagination() {
+export default function Pagination({ page = 1, totalPages = 1 }) {
+  const prevPage = page > 1 ? page - 1 : null;
+  const nextPage = page < totalPages ? page + 1 : null;
+
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
   return (
-    <div className="flex justify-center mt-12">
+    <div className="mt-12 flex justify-center">
       <nav aria-label="Pagination">
         <ul className="inline-flex items-center -space-x-px text-gray-600 dark:text-gray-300">
           <li>
-            <Link
-              href="#"
-              className="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <IoIosArrowBack />
-            </Link>
+            {prevPage ? (
+              <Link
+                href={`?page=${prevPage}`}
+                className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <IoIosArrowBack />
+              </Link>
+            ) : (
+              <span className="ml-0 block cursor-not-allowed rounded-l-lg bg-gray-200 px-3 py-2 text-gray-300">
+                <IoIosArrowBack />
+              </span>
+            )}
           </li>
+
+          {pages.map((p) => (
+            <li key={p}>
+              <Link
+                href={`?page=${p}`}
+                className={`border px-3 py-2 leading-tight ${
+                  p === page
+                    ? "border-primary-600 bg-primary-600 text-white"
+                    : "border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                }`}
+              >
+                {p}
+              </Link>
+            </li>
+          ))}
+
           <li>
-            <Link
-              href="#"
-              className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              1
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              className="px-3 py-2 leading-tight text-white bg-primary-600 border border-primary-600 hover:bg-primary-700 hover:text-white"
-            >
-              2
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              3
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              4
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
-            >
-              <IoIosArrowForward />
-            </Link>
+            {nextPage ? (
+              <Link
+                href={`?page=${nextPage}`}
+                className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              >
+                <IoIosArrowForward />
+              </Link>
+            ) : (
+              <span className="block cursor-not-allowed rounded-r-lg bg-gray-200 px-3 py-2 text-gray-300">
+                <IoIosArrowForward />
+              </span>
+            )}
           </li>
         </ul>
       </nav>

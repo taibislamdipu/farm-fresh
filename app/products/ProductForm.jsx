@@ -101,7 +101,7 @@ export default function ProductForm({ product }) {
         toast.success(`Product ${product ? "updated" : "added"} successfully`);
 
         if (product) {
-          router.push("/manage-product");
+          router.back();
           router.refresh();
         } else {
           e.target.reset();
