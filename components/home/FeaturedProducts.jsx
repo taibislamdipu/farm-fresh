@@ -4,14 +4,14 @@ import { FaArrowRight } from "react-icons/fa";
 import ProductCard from "../../app/products/ProductCard";
 
 export default async function FeaturedProducts() {
-  const products = await getAllProducts();
+  const { products } = await getAllProducts({ page: 1, limit: 8 });
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-12">
+    <section className="bg-gray-50 py-16 dark:bg-gray-900">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">
               Featured Products
             </h2>
             <p className="text-gray-600 dark:text-gray-400">
@@ -20,14 +20,14 @@ export default async function FeaturedProducts() {
           </div>
           <Link
             href="/products"
-            className="text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 flex items-center"
+            className="dark:text-primary-400 dark:hover:text-primary-300 flex items-center font-medium text-primary-600 hover:text-primary-700"
           >
             View All
             <FaArrowRight className="ml-1" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.slice(0, 8).map((product) => (
             <Link href={`/details/${product.id}`} key={product.id}>
               <ProductCard product={product} />
