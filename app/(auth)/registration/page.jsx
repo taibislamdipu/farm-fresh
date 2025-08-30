@@ -1,15 +1,20 @@
 "use client";
+
 import RegistrationForm from "@/components/auth/RegistrationForm";
 import Link from "next/link";
-import RegistrationPageHeader from "./RegistrationPageHeader";
-
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import RegistrationPageHeader from "./RegistrationPageHeader";
 
-export default function RegistrationPage() {
+// This component can safely use useSearchParams
+function RegistrationFormWrapper() {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
 
+  return <RegistrationForm type={type} />;
+}
+
+export default function RegistrationPage() {
   return (
     <div className="min-h-screen px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -18,7 +23,7 @@ export default function RegistrationPage() {
         <div className="mx-auto max-w-4xl">
           <div className="rounded-2xl bg-white px-8 py-8 shadow-xl dark:bg-gray-800">
             <Suspense fallback={<div>Loading...</div>}>
-              <RegistrationForm type={type} />
+              <RegistrationFormWrapper />
             </Suspense>
 
             <div className="mt-6 text-center">
