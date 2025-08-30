@@ -7,7 +7,7 @@ export default function ManageProductCard({ product }) {
     <div className="overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800">
       <div className="relative">
         <Image
-          src={product?.image}
+          src={product?.images?.[0]}
           alt={product?.name}
           className="h-48 w-full object-cover"
           width={500}

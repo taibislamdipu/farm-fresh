@@ -54,7 +54,7 @@ export const POST = async (req) => {
     await productModel.create(newProduct);
     return NextResponse.json(
       { message: "Product has been created", product: newProduct },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err) {
     return NextResponse.json({ message: err.message }, { status: 500 });

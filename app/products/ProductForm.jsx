@@ -7,6 +7,8 @@ import { IoMdClose } from "react-icons/io";
 import { toast } from "react-toastify";
 
 export default function ProductForm({ product }) {
+  console.log("product--->", product);
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
@@ -30,10 +32,49 @@ export default function ProductForm({ product }) {
     setPreview((prev) => [...prev, ...newPreviews]);
   };
 
+  // const handleOnSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (images.length === 0) {
+  //     setError("Please select at least one image.");
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setError("");
+
+  //   try {
+  //     const formData = new FormData(e.target);
+  //     images.forEach((image) => formData.append("images", image));
+
+  //     const res = await fetch("/api/product", {
+  //       method: "POST",
+  //       body: formData,
+  //     });
+
+  //     const data = await res.json();
+  //     const { name } = data.product;
+
+  //     if (res.status === 201) {
+  //       toast.success(`Product ${name} added successfully`);
+  //       e.target.reset();
+  //     } else {
+  //       const data = await res.json();
+  //       setError(data.message || "Something went wrong");
+  //     }
+  //   } catch (error) {
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading(false);
+  //     setPreview([]);
+  //     setImages([]);
+  //   }
+  // };
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
-    if (images.length === 0) {
+    if (images.length === 0 && !product) {
       setError("Please select at least one image.");
       return;
     }
@@ -43,29 +84,30 @@ export default function ProductForm({ product }) {
 
     try {
       const formData = new FormData(e.target);
-      images.forEach((image) => formData.append("images", image));
 
-      const res = await fetch("/api/product", {
-        method: "POST",
-        body: formData,
-      });
+      // Append new images only if selected
+      if (images.length > 0) {
+        images.forEach((image) => formData.append("images", image));
+      }
 
+      const url = product ? `/api/product/${product.id}` : "/api/product";
+      const method = product ? "PATCH" : "POST";
+
+      const res = await fetch(url, { method, body: formData });
       const data = await res.json();
-      const { name } = data.product;
 
-      if (res.status === 201) {
-        toast.success(`Product ${name} added successfully`);
-        e.target.reset();
+      if (res.ok) {
+        toast.success(`Product ${product ? "updated" : "added"} successfully`);
+        if (!product) e.target.reset();
       } else {
-        const data = await res.json();
         setError(data.message || "Something went wrong");
       }
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
-      setPreview([]);
-      setImages([]);
+      setPreview(product?.images || []); // keep old previews when editing
+      if (!product) setImages([]);
     }
   };
 
@@ -86,7 +128,7 @@ export default function ProductForm({ product }) {
 
   useEffect(() => {
     if (product?.images) {
-      setPreview(product.images); // Show existing images
+      setPreview(product.images);
     }
   }, [product]);
 
