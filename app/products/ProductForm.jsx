@@ -2,18 +2,19 @@
 
 import ButtonLoading from "@/components/shared/ButtonLoading";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
-import { toast } from "react-toastify";
 
 export default function ProductForm({ product }) {
-  console.log("product--->", product);
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [preview, setPreview] = useState([]);
   const fileInputRef = useRef(null);
+
+  const router = useRouter();
 
   const handleImageChange = (e) => {
     setError("");
@@ -98,7 +99,15 @@ export default function ProductForm({ product }) {
 
       if (res.ok) {
         toast.success(`Product ${product ? "updated" : "added"} successfully`);
-        if (!product) e.target.reset();
+
+        if (product) {
+          router.push("/manage-product");
+          router.refresh();
+        } else {
+          e.target.reset();
+          setImages([]);
+          setPreview([]);
+        }
       } else {
         setError(data.message || "Something went wrong");
       }
@@ -106,8 +115,7 @@ export default function ProductForm({ product }) {
       setError(error.message);
     } finally {
       setLoading(false);
-      setPreview(product?.images || []); // keep old previews when editing
-      if (!product) setImages([]);
+      if (product) setPreview(product.images || []);
     }
   };
 

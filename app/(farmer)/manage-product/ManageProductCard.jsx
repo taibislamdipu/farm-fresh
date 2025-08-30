@@ -1,8 +1,30 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaEye, FaHeart } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
 export default function ManageProductCard({ product }) {
+  const router = useRouter();
+
+  const handleProductDelete = async () => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      const res = await fetch(`/api/product/${product.id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        router.refresh(); // refresh product list
+      } else {
+        const data = await res.json();
+        alert(data.message || "Failed to delete product");
+      }
+    }
+  };
+
   return (
     <div className="overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800">
       <div className="relative">
@@ -56,13 +78,25 @@ export default function ManageProductCard({ product }) {
         </div>
 
         <div className="flex space-x-2">
-          <button className="flex-1 rounded-lg bg-primary-600 py-2 text-sm font-medium text-white transition hover:bg-primary-700">
-            <i className="fas fa-edit mr-1"></i>Edit
-          </button>
-          <button className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
+          <Link
+            href={`/manage-product/edit/${product.id}`}
+            key={product.id}
+            className="flex flex-1 items-center justify-center rounded-lg bg-primary-600 py-2 text-sm font-medium text-white transition hover:bg-primary-700"
+          >
+            <FiEdit className="mr-1" size={24} /> Edit
+          </Link>
+
+          <Link
+            href={`/details/${product.id}`}
+            className="rounded-lg border border-gray-300 px-4 py-2 text-gray-700 transition hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+          >
             <FaEye size={24} />
-          </button>
-          <button className="rounded-lg border border-red-300 px-4 py-2 text-red-600 transition hover:bg-red-50 dark:hover:bg-red-900">
+          </Link>
+
+          <button
+            onClick={() => handleProductDelete(product.id)}
+            className="rounded-lg border border-red-300 px-4 py-2 text-red-600 transition hover:bg-red-50 dark:hover:bg-red-900"
+          >
             <MdDelete size={24} />
           </button>
         </div>

@@ -4,7 +4,6 @@ import productModel from "@/models/product-model";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (req, { params }) => {
-  console.log("PATCH params:", params);
   await connectMongo();
 
   try {
@@ -68,6 +67,45 @@ export const PATCH = async (req, { params }) => {
 
     return NextResponse.json(
       { message: "Product has been updated", product: updatedProduct },
+      { status: 200 },
+    );
+  } catch (err) {
+    return NextResponse.json({ message: err.message }, { status: 500 });
+  }
+};
+
+export const DELETE = async (req, { params }) => {
+  await connectMongo();
+  const { id } = params;
+
+  if (!id) {
+    return NextResponse.json(
+      { message: "Product ID missing" },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const product = await productModel.findById(id);
+
+    if (!product) {
+      return NextResponse.json(
+        { message: "Product not found" },
+        { status: 404 },
+      );
+    }
+
+    // Delete images from Cloudinary
+    for (const imageUrl of product.images) {
+      const publicId = imageUrl.split("/").pop().split(".")[0]; // extract public_id from URL
+      await cloudinary.uploader.destroy(`farm-fresh/products/${publicId}`);
+    }
+
+    // Delete product from MongoDB
+    await productModel.findByIdAndDelete(id);
+
+    return NextResponse.json(
+      { message: "Product deleted successfully" },
       { status: 200 },
     );
   } catch (err) {
