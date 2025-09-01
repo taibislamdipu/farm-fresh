@@ -2,12 +2,15 @@
 
 import { signOut } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 export default function LoggedInUserMenu({ session }) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef(null);
+  const pathname = usePathname(); // watch route changes
 
   const handleToggle = () => setOpen((prev) => !prev);
 
@@ -18,11 +21,14 @@ export default function LoggedInUserMenu({ session }) {
         setOpen(false);
       }
     };
-
-    // Safe to use in client component
     window.addEventListener("mousedown", handleClickOutside);
     return () => window.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Close dropdown on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   const handleLogout = async (e) => {
     e.stopPropagation();
@@ -34,12 +40,12 @@ export default function LoggedInUserMenu({ session }) {
     <div ref={menuRef} className="relative inline-block text-left">
       <button
         onClick={handleToggle}
-        className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+        className="dark:hover:text-primary-400 flex items-center space-x-2 text-gray-700 hover:text-primary-600 dark:text-gray-300"
       >
         <Image
           src={session?.user?.image}
           alt="User"
-          className="w-8 h-8 rounded-full"
+          className="h-8 w-8 rounded-full"
           width={32}
           height={32}
         />
@@ -48,16 +54,13 @@ export default function LoggedInUserMenu({ session }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-10">
+        <div className="absolute right-0 z-10 mt-2 w-48 rounded-md border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
           <div className="py-2 text-sm text-gray-700 dark:text-gray-300">
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-              Profile
-            </div>
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-              Settings
+            <div className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+              <Link href="/manage-product">Manage Listings</Link>
             </div>
             <div
-              className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+              className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
               onClick={handleLogout}
             >
               Logout

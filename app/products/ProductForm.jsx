@@ -2,7 +2,7 @@
 
 import ButtonLoading from "@/components/shared/ButtonLoading";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
@@ -13,8 +13,10 @@ export default function ProductForm({ product }) {
   const [images, setImages] = useState([]);
   const [preview, setPreview] = useState([]);
   const fileInputRef = useRef(null);
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const fromPage = searchParams.get("fromPage") || 1;
 
   const handleImageChange = (e) => {
     setError("");
@@ -32,45 +34,6 @@ export default function ProductForm({ product }) {
     const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
     setPreview((prev) => [...prev, ...newPreviews]);
   };
-
-  // const handleOnSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   if (images.length === 0) {
-  //     setError("Please select at least one image.");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   setError("");
-
-  //   try {
-  //     const formData = new FormData(e.target);
-  //     images.forEach((image) => formData.append("images", image));
-
-  //     const res = await fetch("/api/product", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-
-  //     const data = await res.json();
-  //     const { name } = data.product;
-
-  //     if (res.status === 201) {
-  //       toast.success(`Product ${name} added successfully`);
-  //       e.target.reset();
-  //     } else {
-  //       const data = await res.json();
-  //       setError(data.message || "Something went wrong");
-  //     }
-  //   } catch (error) {
-  //     setError(error.message);
-  //   } finally {
-  //     setLoading(false);
-  //     setPreview([]);
-  //     setImages([]);
-  //   }
-  // };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -101,7 +64,7 @@ export default function ProductForm({ product }) {
         toast.success(`Product ${product ? "updated" : "added"} successfully`);
 
         if (product) {
-          router.back();
+          router.push(`/manage-product?page=${fromPage}`);
           router.refresh();
         } else {
           e.target.reset();

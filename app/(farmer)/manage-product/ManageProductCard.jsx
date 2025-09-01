@@ -7,7 +7,7 @@ import { FaEye, FaHeart } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
-export default function ManageProductCard({ product }) {
+export default function ManageProductCard({ product, currentPage }) {
   const router = useRouter();
 
   const handleProductDelete = async () => {
@@ -79,7 +79,7 @@ export default function ManageProductCard({ product }) {
 
         <div className="flex space-x-2">
           <Link
-            href={`/manage-product/edit/${product.id}`}
+            href={`/manage-product/edit/${product.id}?fromPage=${currentPage}`}
             key={product.id}
             className="flex flex-1 items-center justify-center rounded-lg bg-primary-600 py-2 text-sm font-medium text-white transition hover:bg-primary-700"
           >
