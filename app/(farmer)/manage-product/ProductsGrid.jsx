@@ -7,7 +7,19 @@ export const revalidate = 0;
 
 export default async function ProductsGrid({ searchParams }) {
   const page = parseInt(searchParams?.page) || 1;
-  const { products, total } = await getAllProducts({ page, limit: 6 });
+
+  const filters = {
+    search: searchParams?.search || "",
+    category: searchParams?.category || "",
+    status: searchParams?.status || "",
+  };
+
+  const { products, total } = await getAllProducts({
+    page,
+    limit: 6,
+    filters,
+  });
+
   const totalPages = Math.ceil(total / 6);
 
   return (
@@ -22,7 +34,19 @@ export default async function ProductsGrid({ searchParams }) {
         ))}
       </div>
 
-      <Pagination page={page} totalPages={totalPages} />
+      {products.length > 0 && (
+        <Pagination page={page} totalPages={totalPages} />
+      )}
+
+      <div>
+        {products.length === 0 && (
+          <div className="mt-16">
+            <h2 className="mb-8 text-center text-2xl font-bold text-gray-900 dark:text-white">
+              No products found
+            </h2>
+          </div>
+        )}
+      </div>
     </>
   );
 }
