@@ -2,11 +2,11 @@ import Link from "next/link";
 
 const categories = [
   { label: "vegetables", icon: "fa-carrot", count: 150, bg: "green" },
-  { label: "Fruits", icon: "fa-apple-alt", count: 80, bg: "red" },
-  { label: "Grains", icon: "fa-seedling", count: 45, bg: "yellow" },
-  { label: "Dairy", icon: "fa-cheese", count: 25, bg: "blue" },
-  { label: "Honey", icon: "fa-jar", count: 15, bg: "purple" },
-  { label: "Herbs", icon: "fa-leaf", count: 30, bg: "orange" },
+  { label: "fruits", icon: "fa-apple-alt", count: 80, bg: "red" },
+  { label: "grains", icon: "fa-seedling", count: 45, bg: "yellow" },
+  { label: "dairy", icon: "fa-cheese", count: 25, bg: "blue" },
+  { label: "honey", icon: "fa-jar", count: 15, bg: "purple" },
+  { label: "herbs", icon: "fa-leaf", count: 30, bg: "orange" },
 ];
 
 export default function ShopByCategory() {
@@ -35,7 +35,7 @@ export default function ShopByCategory() {
                   <i
                     className={`fas ${cat.icon} text-3xl text-${cat.bg}-600 dark:text-${cat.bg}-400 mb-3`}
                   ></i>
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                  <h3 className="font-semibold capitalize text-gray-900 dark:text-white">
                     {cat.label}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
