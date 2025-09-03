@@ -29,6 +29,22 @@ export default async function ProductDetails({ params: { id } }) {
     { label: product?.name },
   ];
 
+  const featureColors = {
+    organic:
+      "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    pesticide_free:
+      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    fresh: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    non_gmo:
+      "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    local: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
+    sustainable:
+      "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200",
+    fair_trade:
+      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
+    gluten_free: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+  };
+
   return (
     <div>
       <Breadcrumb items={breadcrumbItems} />
@@ -88,15 +104,16 @@ export default async function ProductDetails({ params: { id } }) {
 
           {/* <!-- Product Information --> */}
           <div className="space-y-6">
-            {/* <!-- Product Header --> */}
             <div>
               <div className="mb-2 flex items-center space-x-2">
-                <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-200">
-                  Organic
-                </span>
-                <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  Fresh
-                </span>
+                {product?.productFeatures?.map((feature) => (
+                  <span
+                    key={feature}
+                    className={`rounded-full px-2 py-1 text-xs font-medium capitalize ${featureColors[feature]}`}
+                  >
+                    {feature.replace(/_/g, " ")}
+                  </span>
+                ))}
               </div>
               <h1 className="mb-2 text-3xl font-bold capitalize text-gray-900 dark:text-white">
                 {product.name}

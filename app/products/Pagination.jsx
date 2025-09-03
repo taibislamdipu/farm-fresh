@@ -1,8 +1,18 @@
 "use client";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 export default function Pagination({ page = 1, totalPages = 1 }) {
+  const searchParams = useSearchParams();
+
+  // Convert current params to an object
+  const getParamsWithPage = (newPage) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage); // update page, keep filters
+    return `?${params.toString()}`;
+  };
+
   const prevPage = page > 1 ? page - 1 : null;
   const nextPage = page < totalPages ? page + 1 : null;
 
@@ -15,7 +25,7 @@ export default function Pagination({ page = 1, totalPages = 1 }) {
           <li>
             {prevPage ? (
               <Link
-                href={`?page=${prevPage}`}
+                href={getParamsWithPage(prevPage)}
                 className="ml-0 block rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 <IoIosArrowBack />
@@ -30,7 +40,7 @@ export default function Pagination({ page = 1, totalPages = 1 }) {
           {pages.map((p) => (
             <li key={p}>
               <Link
-                href={`?page=${p}`}
+                href={getParamsWithPage(p)}
                 className={`border px-3 py-2 leading-tight ${
                   p === page
                     ? "border-primary-600 bg-primary-600 text-white"
@@ -45,7 +55,7 @@ export default function Pagination({ page = 1, totalPages = 1 }) {
           <li>
             {nextPage ? (
               <Link
-                href={`?page=${nextPage}`}
+                href={getParamsWithPage(nextPage)}
                 className="block rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
               >
                 <IoIosArrowForward />

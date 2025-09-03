@@ -22,7 +22,11 @@ export default function FiltersAndSearch() {
   };
 
   const handleFilter = () => {
-    const query = new URLSearchParams(filters).toString();
+    const query = new URLSearchParams({
+      ...filters,
+      page: 1, // reset pagination when applying new filters
+    }).toString();
+
     router.push(`/manage-product?${query}`);
   };
 
@@ -67,6 +71,8 @@ export default function FiltersAndSearch() {
             <option value="fruits">Fruits</option>
             <option value="grains">Grains</option>
             <option value="dairy">Dairy</option>
+            <option value="herbs">Herbs</option>
+            <option value="honey">Honey</option>
           </select>
         </div>
 

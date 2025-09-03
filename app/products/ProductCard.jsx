@@ -12,13 +12,19 @@ export default function ProductCard({ product }) {
           width={200}
           height={150}
         />
-        {product.label && (
-          <div className="absolute left-3 top-3">
-            <span className="rounded-full bg-green-500 px-2 py-1 text-xs font-medium text-white">
-              {product.label}
-            </span>
+        {product?.productFeatures?.length > 0 && (
+          <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+            {product.productFeatures.map((feature, index) => (
+              <span
+                key={index}
+                className="rounded-full bg-green-500 px-2 py-1 text-xs font-medium capitalize text-white"
+              >
+                {feature}
+              </span>
+            ))}
           </div>
         )}
+
         <div className="absolute right-3 top-3">
           <button className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700">
             <FaHeart className="text-gray-600 dark:text-gray-400" />

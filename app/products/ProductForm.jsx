@@ -373,7 +373,7 @@ export default function ProductForm({ product }) {
               <input
                 type="checkbox"
                 name="features"
-                value="pesticide-free"
+                value="pesticide_free"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="ml-2 text-sm">Pesticide Free</span>
@@ -391,7 +391,7 @@ export default function ProductForm({ product }) {
               <input
                 type="checkbox"
                 name="features"
-                value="non-gmo"
+                value="non_gmo"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="ml-2 text-sm">Non-GMO</span>
@@ -418,7 +418,7 @@ export default function ProductForm({ product }) {
               <input
                 type="checkbox"
                 name="features"
-                value="fair-trade"
+                value="fair_trade"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="ml-2 text-sm">Fair Trade</span>
@@ -427,7 +427,7 @@ export default function ProductForm({ product }) {
               <input
                 type="checkbox"
                 name="features"
-                value="gluten-free"
+                value="gluten_free"
                 className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
               <span className="ml-2 text-sm">Gluten-Free</span>

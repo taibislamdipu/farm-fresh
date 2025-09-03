@@ -8,6 +8,8 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
 export default function ManageProductCard({ product, currentPage }) {
+  console.log("product--->", product);
+
   const router = useRouter();
 
   const handleProductDelete = async () => {
@@ -59,8 +61,22 @@ export default function ManageProductCard({ product, currentPage }) {
           </div>
         </div>
 
-        <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">
-          Organic • Vegetables
+        <p className="mb-3 text-sm capitalize text-gray-600 dark:text-gray-400">
+          {product?.productFeatures?.length > 0 ? (
+            product.productFeatures.map((feature, index) => (
+              <span
+                key={index}
+                className="mb-2 mr-2 inline-block rounded bg-gray-100 px-2 py-1 text-sm text-gray-700 dark:bg-gray-700 dark:text-white"
+              >
+                {feature.replace(/_/g, " ")}
+              </span>
+            ))
+          ) : (
+            <>
+              <span className="text-gray-400">No features</span>{" "}
+            </>
+          )}
+          • {product?.category}
         </p>
 
         <div className="mb-4 flex items-center justify-between">
