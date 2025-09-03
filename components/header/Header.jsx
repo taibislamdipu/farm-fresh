@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import Logo from "../shared/Logo";
 import Cart from "./Cart";
 import DarkMode from "./DarkMode";
@@ -9,9 +10,9 @@ import UserMenu from "./UserMenu";
 
 export default function Header() {
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="sticky top-0 z-50 bg-white shadow-lg dark:bg-gray-800">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
           <div>
             <Link href="/">
               <Logo />
@@ -21,7 +22,9 @@ export default function Header() {
           <NavLinks />
 
           <div className="flex items-center space-x-4">
-            <SearchProduct />
+            <Suspense fallback={<div>Loading...</div>}>
+              <SearchProduct />
+            </Suspense>
             <Cart />
             <UserMenu />
             <DarkMode />
