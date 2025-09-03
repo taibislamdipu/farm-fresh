@@ -59,7 +59,7 @@ export default async function ProductDetails({ params: { id } }) {
           {/* <!-- Product Information --> */}
           <div className="space-y-6">
             <div>
-              <div className="mb-2 flex items-center space-x-2">
+              <div className="mb-2 flex flex-wrap items-center gap-2">
                 {product?.productFeatures?.map((feature) => (
                   <span
                     key={feature}
