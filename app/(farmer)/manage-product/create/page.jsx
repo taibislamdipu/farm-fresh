@@ -12,7 +12,7 @@ export default function CreateProductPage() {
           </p>
         </div>
 
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="p-8">Loading...</div>}>
           <ProductForm />
         </Suspense>
       </div>
