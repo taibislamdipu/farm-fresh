@@ -1,29 +1,32 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function Category() {
+export default function Category({ categories }) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const selectedCategory = searchParams.get("category") || ""; // e.g., 'Vegetables'
 
-  const categories = [
-    { label: "vegetables", count: 45 },
-    { label: "fruits", count: 32 },
-    { label: "grains", count: 18 },
-    { label: "dairy", count: 12 },
-    { label: "herbs", count: 12 },
-    { label: "honey", count: 12 },
-  ];
+  // Get selected categories as array
+  const selectedCategories = searchParams.get("category")
+    ? searchParams.get("category").split(",")
+    : [];
 
   const handleCheckboxChange = (label, checked) => {
     const params = new URLSearchParams(searchParams.toString());
+    let newCategories = [...selectedCategories];
+
     if (checked) {
-      params.set("category", label);
+      newCategories.push(label);
+    } else {
+      newCategories = newCategories.filter((c) => c !== label);
+    }
+
+    if (newCategories.length > 0) {
+      params.set("category", newCategories.join(","));
     } else {
       params.delete("category");
     }
-    params.set("page", 1); // reset to first page
+
+    params.set("page", 1); // reset page
     router.push(`/products?${params.toString()}`);
   };
 
@@ -37,7 +40,7 @@ export default function Category() {
           <label key={cat.label} className="flex cursor-pointer items-center">
             <input
               type="checkbox"
-              checked={selectedCategory === cat.label}
+              checked={selectedCategories.includes(cat.label)}
               onChange={(e) =>
                 handleCheckboxChange(cat.label, e.target.checked)
               }

@@ -18,25 +18,34 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
     newest: { harvestDate: -1 },
     rating: { rating: -1 },
   };
-
   const sortQuery = sortOptions[filters.sort || "featured"];
   const skip = (page - 1) * limit;
 
   const query = {};
 
+  // Search by name
   if (filters.search) {
     query.name = { $regex: filters.search, $options: "i" };
   }
 
+  // Filter by category (support multiple)
   if (filters.category) {
-    query.category = { $regex: `^${filters.category}$`, $options: "i" }; // case-insensitive exact match
+    const categories = filters.category.split(",").map((c) => c.toLowerCase());
+    query.category = { $in: categories };
   }
 
-  if (filters.price) {
-    const [min, max] = filters.price.split("-");
-    query.pricePerUnit = {};
-    if (min) query.pricePerUnit.$gte = Number(min);
-    if (max) query.pricePerUnit.$lte = Number(max);
+  // Filter by status
+  if (filters.status) {
+    query.status = filters.status;
+  }
+
+  // Filter by price range (if you implement price filter)
+  if (filters.minPrice !== undefined) {
+    query.pricePerUnit = { $gte: filters.minPrice };
+  }
+  if (filters.maxPrice !== undefined) {
+    query.pricePerUnit = query.pricePerUnit || {};
+    query.pricePerUnit.$lte = filters.maxPrice;
   }
 
   const products = await productModel
@@ -58,6 +67,30 @@ export async function getProductsByCategory(category) {
   await connectMongo();
   const products = await productModel.find({ category }).lean();
   return replaceMongoIdInArray(products);
+}
+
+export async function getCategoriesWithCounts() {
+  await connectMongo();
+
+  const categories = [
+    "vegetables",
+    "fruits",
+    "grains",
+    "dairy",
+    "herbs",
+    "honey",
+  ];
+
+  const results = await Promise.all(
+    categories.map(async (label) => {
+      const count = await productModel.countDocuments({
+        category: new RegExp(`^${label}$`, "i"),
+      });
+      return { label, count };
+    }),
+  );
+
+  return results;
 }
 
 export async function getProductById(id) {

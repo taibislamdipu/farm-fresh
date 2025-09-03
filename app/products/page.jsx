@@ -22,8 +22,6 @@ export default async function ProductsPage({ searchParams }) {
 
   const totalPages = Math.ceil(total / 6);
 
-  console.log("products--->", products);
-
   return (
     <div>
       <div className="bg-primary-600 py-12 text-white">

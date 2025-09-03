@@ -1,7 +1,9 @@
+import { getCategoriesWithCounts } from "@/database/queries";
 import Category from "./Category";
 import PriceRange from "./PriceRange";
 
-export default function SidebarFilter() {
+export default async function SidebarFilter() {
+  const categories = await getCategoriesWithCounts();
   return (
     <div className="lg:col-span-1">
       <div className="sticky top-24 rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
@@ -9,7 +11,7 @@ export default function SidebarFilter() {
           Filters
         </h3>
 
-        <Category />
+        <Category categories={categories} />
         <PriceRange />
         {/* <Location />
         <OrganicFilter /> */}

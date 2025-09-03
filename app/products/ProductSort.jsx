@@ -1,8 +1,6 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MdGridOn } from "react-icons/md";
-import { TfiMenuAlt } from "react-icons/tfi";
 
 export default function ProductSort({ total, page, limit }) {
   const router = useRouter();
@@ -45,14 +43,14 @@ export default function ProductSort({ total, page, limit }) {
           <option value="newest">Newest First</option>
           <option value="rating">Rating</option>
         </select>
-        <div className="flex rounded-lg border border-gray-300 dark:border-gray-600">
+        {/* <div className="flex rounded-lg border border-gray-300 dark:border-gray-600">
           <button className="rounded-l-lg bg-primary-600 p-2 text-white">
             <MdGridOn size={24} />
           </button>
           <button className="rounded-r-lg p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700">
             <TfiMenuAlt size={24} />
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
