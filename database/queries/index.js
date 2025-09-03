@@ -48,7 +48,10 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
 
   const total = await productModel.countDocuments(query);
 
-  return { products, total };
+  return {
+    products: replaceMongoIdInArray(products),
+    total,
+  };
 }
 
 export async function getProductsByCategory(category) {

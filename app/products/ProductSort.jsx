@@ -1,11 +1,10 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdGridOn } from "react-icons/md";
 import { TfiMenuAlt } from "react-icons/tfi";
 
-export default function ProductSort() {
+export default function ProductSort({ total, page, limit }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [sort, setSort] = useState(searchParams.get("sort") || "featured");
@@ -24,10 +23,15 @@ export default function ProductSort() {
     router.push(`/products?${params.toString()}`);
   };
 
+  const start = total > 0 ? (page - 1) * limit + 1 : 0;
+  const end = total > 0 ? Math.min(page * limit, total) : 0;
+
   return (
     <div className="mb-6 flex items-center justify-between">
       <p className="text-gray-600 dark:text-gray-400">
-        Showing 1-12 of products
+        {total > 0
+          ? `Showing ${start}-${end} of ${total} products`
+          : "No products found"}
       </p>
       <div className="flex items-center space-x-4">
         <select

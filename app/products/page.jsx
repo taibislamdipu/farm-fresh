@@ -22,6 +22,8 @@ export default async function ProductsPage({ searchParams }) {
 
   const totalPages = Math.ceil(total / 6);
 
+  console.log("products--->", products);
+
   return (
     <div>
       <div className="bg-primary-600 py-12 text-white">
@@ -40,7 +42,7 @@ export default async function ProductsPage({ searchParams }) {
           </Suspense>
 
           <div className="lg:col-span-3">
-            <ProductSort />
+            <ProductSort total={total} page={page} limit={6} />
 
             {products.length === 0 ? (
               <p className="text-gray-500">No products found.</p>
@@ -54,7 +56,9 @@ export default async function ProductsPage({ searchParams }) {
               </div>
             )}
 
-            <Pagination page={page} totalPages={totalPages} />
+            {products.length > 0 && (
+              <Pagination page={page} totalPages={totalPages} />
+            )}
           </div>
         </div>
       </div>
