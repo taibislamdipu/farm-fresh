@@ -1,4 +1,5 @@
 import ProductForm from "@/app/products/ProductForm";
+import { Suspense } from "react";
 
 export default function CreateProductPage() {
   return (
@@ -11,7 +12,9 @@ export default function CreateProductPage() {
           </p>
         </div>
 
-        <ProductForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <ProductForm />
+        </Suspense>
       </div>
     </div>
   );

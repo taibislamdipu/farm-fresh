@@ -108,6 +108,7 @@ export default function ProductForm({ product }) {
       <div>
         {error && <p className="space-y-8 p-8 text-red-500">{error}</p>}
       </div>
+
       <form className="space-y-8 p-8" onSubmit={handleOnSubmit}>
         <div>
           <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white">
