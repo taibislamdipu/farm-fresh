@@ -9,13 +9,13 @@ import ProductSort from "./ProductSort";
 export default async function ProductsPage({ searchParams }) {
   const page = parseInt(searchParams?.page) || 1;
   const search = searchParams?.search || "";
-
   const sort = searchParams?.sort || "featured";
+  const category = searchParams?.category || ""; // ✅ get category from URL
 
   const { products, total } = await getAllProducts({
     page,
     limit: 6,
-    filters: { search, sort },
+    filters: { search, sort, category }, // ✅ include category
   });
 
   const totalPages = Math.ceil(total / 6);
