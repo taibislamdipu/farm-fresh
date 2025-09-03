@@ -2,11 +2,11 @@
 import { getProductById } from "@/database/queries";
 import connectMongo from "@/dbConnect/mongo";
 import productModel from "@/models/product-model";
-import Image from "next/image";
 import Link from "next/link";
 import { FaBolt, FaStar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import Breadcrumb from "../Breadcrumb";
+import ProductGallery from "../ProductGallery";
 import Quantity from "../Quantity";
 import RelatedProducts from "../RelatedProducts";
 
@@ -22,6 +22,9 @@ export async function generateStaticParams() {
 
 export default async function ProductDetails({ params: { id } }) {
   const product = await getProductById(id);
+
+  const isPurchased = false;
+  const numReviews = 0;
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -51,56 +54,7 @@ export default async function ProductDetails({ params: { id } }) {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          <div className="space-y-4">
-            <div className="aspect-square overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800">
-              <Image
-                id="mainImage"
-                src={product?.images?.[0]}
-                alt="Fresh Tomatoes"
-                className="h-full w-full object-cover"
-                width={600}
-                height={600}
-              />
-            </div>
-
-            <div className="grid grid-cols-5 gap-2">
-              <button className="aspect-square overflow-hidden rounded-lg border-2 border-primary-500 bg-white dark:bg-gray-800">
-                <img
-                  src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=1000&h=1000&fit=crop"
-                  alt="Tomatoes 1"
-                  className="h-full w-full object-cover"
-                />
-              </button>
-              <button className="aspect-square overflow-hidden rounded-lg border-2 border-transparent bg-white hover:border-primary-500 dark:bg-gray-800">
-                <img
-                  src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=10000&h=10000&fit=crop"
-                  alt="Tomatoes 2"
-                  className="h-full w-full object-cover"
-                />
-              </button>
-              <button className="aspect-square overflow-hidden rounded-lg border-2 border-transparent bg-white hover:border-primary-500 dark:bg-gray-800">
-                <img
-                  src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=1000&h=1000&fit=crop"
-                  alt="Tomatoes 3"
-                  className="h-full w-full object-cover"
-                />
-              </button>
-              <button className="aspect-square overflow-hidden rounded-lg border-2 border-transparent bg-white hover:border-primary-500 dark:bg-gray-800">
-                <img
-                  src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=1000&h=1000&fit=crop"
-                  alt="Tomatoes 4"
-                  className="h-full w-full object-cover"
-                />
-              </button>
-              <button className="aspect-square overflow-hidden rounded-lg border-2 border-transparent bg-white hover:border-primary-500 dark:bg-gray-800">
-                <img
-                  src="https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=1000&h=1000&fit=crop"
-                  alt="Tomatoes 5"
-                  className="h-full w-full object-cover"
-                />
-              </button>
-            </div>
-          </div>
+          <ProductGallery images={product.images} />
 
           {/* <!-- Product Information --> */}
           <div className="space-y-6">
@@ -128,24 +82,28 @@ export default async function ProductDetails({ params: { id } }) {
 
             {/* <!-- Rating and Reviews --> */}
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1">
-                <div className="flex items-center">
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
+              {numReviews > 0 && (
+                <div className="flex items-center space-x-1">
+                  <div className="flex items-center">
+                    <FaStar className="text-yellow-400" />
+                    <FaStar className="text-yellow-400" />
+                    <FaStar className="text-yellow-400" />
+                    <FaStar className="text-yellow-400" />
+                    <FaStar className="text-yellow-400" />
+                  </div>
+                  <span className="text-lg font-semibold text-gray-900 dark:text-white">
+                    4.8
+                  </span>
                 </div>
-                <span className="text-lg font-semibold text-gray-900 dark:text-white">
-                  4.8
-                </span>
-              </div>
+              )}
               <span className="text-gray-500 dark:text-gray-400">
-                (127 reviews)
+                ({numReviews} reviews)
               </span>
-              <button className="dark:text-primary-400 text-primary-600 hover:underline">
-                Write a review
-              </button>
+              {isPurchased && (
+                <button className="dark:text-primary-400 text-primary-600 hover:underline">
+                  Write a review
+                </button>
+              )}
             </div>
 
             {/* <!-- Price and Stock --> */}
@@ -163,8 +121,9 @@ export default async function ProductDetails({ params: { id } }) {
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     Available Stock
                   </p>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {product.stock} kg
+                  <p className="space-x-1 text-lg font-semibold text-gray-900 dark:text-white">
+                    <span>{product?.stock}</span>
+                    <span className="capitalize">{product?.unit}</span>
                   </p>
                 </div>
               </div>
@@ -176,7 +135,7 @@ export default async function ProductDetails({ params: { id } }) {
               </div>
             </div>
 
-            <Quantity />
+            <Quantity product={product} />
 
             {/* <!-- Action Buttons --> */}
             <div className="space-y-3">
