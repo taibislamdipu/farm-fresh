@@ -20,7 +20,6 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
   };
 
   const sortQuery = sortOptions[filters.sort || "featured"];
-
   const skip = (page - 1) * limit;
 
   const query = {};
@@ -30,11 +29,14 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
   }
 
   if (filters.category) {
-    query.category = filters.category;
+    query.category = { $regex: `^${filters.category}$`, $options: "i" }; // case-insensitive exact match
   }
 
-  if (filters.status) {
-    query.status = filters.status;
+  if (filters.price) {
+    const [min, max] = filters.price.split("-");
+    query.pricePerUnit = {};
+    if (min) query.pricePerUnit.$gte = Number(min);
+    if (max) query.pricePerUnit.$lte = Number(max);
   }
 
   const products = await productModel
@@ -46,10 +48,7 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
 
   const total = await productModel.countDocuments(query);
 
-  return {
-    products: replaceMongoIdInArray(products),
-    total,
-  };
+  return { products, total };
 }
 
 export async function getProductsByCategory(category) {

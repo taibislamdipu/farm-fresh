@@ -1,4 +1,5 @@
 import SidebarFilter from "@/components/filter/SidebarFilter";
+
 import { getAllProducts } from "@/database/queries";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -10,12 +11,13 @@ export default async function ProductsPage({ searchParams }) {
   const page = parseInt(searchParams?.page) || 1;
   const search = searchParams?.search || "";
   const sort = searchParams?.sort || "featured";
-  const category = searchParams?.category || ""; // ✅ get category from URL
+  const category = searchParams?.category || "";
+  const price = searchParams?.price || "";
 
   const { products, total } = await getAllProducts({
     page,
     limit: 6,
-    filters: { search, sort, category }, // ✅ include category
+    filters: { search, sort, category, price },
   });
 
   const totalPages = Math.ceil(total / 6);
