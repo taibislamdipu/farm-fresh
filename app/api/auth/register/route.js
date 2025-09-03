@@ -4,7 +4,6 @@ import userModel from "@/models/user-model";
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
-  console.log("req--->", req);
   await connectMongo();
 
   const formData = await req.formData();
@@ -26,7 +25,7 @@ export const POST = async (req) => {
 
   let imageUrl = "";
 
-  if (profilePicture && typeof profilePicture === "object") {
+  if (profilePicture && profilePicture.size > 0) {
     const buffer = Buffer.from(await profilePicture.arrayBuffer());
 
     const uploadResult = await new Promise((resolve, reject) => {

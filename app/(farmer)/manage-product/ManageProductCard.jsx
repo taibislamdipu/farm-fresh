@@ -8,8 +8,6 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
 export default function ManageProductCard({ product, currentPage }) {
-  console.log("product--->", product);
-
   const router = useRouter();
 
   const handleProductDelete = async () => {

@@ -56,10 +56,7 @@ export default function Footer() {
             <h4 className="mb-4 font-semibold">For Farmers</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <Link
-                  href="/registration?type=farmer"
-                  className="hover:text-white"
-                >
+                <Link href="/registration" className="hover:text-white">
                   Join as Farmer
                 </Link>
               </li>

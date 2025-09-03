@@ -213,7 +213,7 @@ export default function AboutPage() {
               Contact Us
             </a>
             <Link
-              href="/registration?type=farmer"
+              href="/registration"
               className="inline-flex items-center justify-center rounded-lg border border-primary-600 px-6 py-3 font-medium text-primary-600 transition hover:bg-primary-50 dark:hover:bg-primary-900"
             >
               <FaUserPlus size={24} className="mr-2" />

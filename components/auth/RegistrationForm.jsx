@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaCamera, FaTractor, FaUser } from "react-icons/fa";
-import { toast } from "react-toastify";
 import ImageAvatar from "../../public/assets/profile-placeholder-image.jpg";
 import ButtonLoading from "../shared/ButtonLoading";
 
@@ -27,7 +28,9 @@ export default function RegistrationForm({ type }) {
   });
   const [bioLength, setBioLength] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const fileInputRef = useRef();
+  const router = useRouter();
 
   // Handle generic input changes
   const handleChange = (e) => {
@@ -69,6 +72,7 @@ export default function RegistrationForm({ type }) {
 
       if (res.status === 201) {
         toast.success("Account created successfully");
+        router.push("/login");
       } else {
         toast.error(uploadedData.message || "Something went wrong");
       }
@@ -76,6 +80,7 @@ export default function RegistrationForm({ type }) {
       console.log("uploadedData--->", uploadedData);
     } catch (error) {
       console.error("error--->", error);
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
