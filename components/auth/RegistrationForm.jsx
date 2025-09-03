@@ -8,41 +8,56 @@ import ImageAvatar from "../../public/assets/profile-placeholder-image.jpg";
 import ButtonLoading from "../shared/ButtonLoading";
 
 export default function RegistrationForm({ type }) {
-  const [userType, setUserType] = useState("customer");
-  const [profilePreview, setProfilePreview] = useState(null);
+  const [user, setUser] = useState({
+    userType: "customer",
+    profilePreview: null,
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    bio: "",
+    password: "",
+    confirmPassword: "",
+    farmName: "",
+    specialization: "",
+    farmSize: "",
+    farmSizeUnit: "acres",
+    termsAccepted: false,
+  });
   const [bioLength, setBioLength] = useState(0);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
 
-  const handleUserTypeChange = (e) => {
-    setUserType(e.target.value);
+  // Handle generic input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "bio") {
+      setBioLength(value.length);
+    }
   };
 
-  const handleBioInput = (e) => {
-    setBioLength(e.target.value.length);
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const previewURL = URL.createObjectURL(file);
+      setUser((prev) => ({ ...prev, profilePreview: previewURL }));
+    }
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const form = e.target;
-    const formData = new FormData(form);
 
-    if (formData.get("password") !== formData.get("confirmPassword")) {
+    if (user.password !== user.confirmPassword) {
       alert("Passwords do not match!");
+      setLoading(false);
       return;
     }
 
-    // if (userType === "farmer") {
-    //   if (!formData.get("farmName").trim()) {
-    //     alert("Farm name is required for farmers.");
-    //     return;
-    //   }
-    //   if (!formData.get("specialization")) {
-    //     alert("Please select your farming specialization.");
-    //     return;
-    //   }
-    // }
+    const formData = new FormData(e.target);
 
     try {
       const res = await fetch("/api/auth/register", {
@@ -55,8 +70,7 @@ export default function RegistrationForm({ type }) {
       if (res.status === 201) {
         toast.success("Account created successfully");
       } else {
-        const data = await res.json();
-        setError(data.message || "Something went wrong");
+        toast.error(uploadedData.message || "Something went wrong");
       }
 
       console.log("uploadedData--->", uploadedData);
@@ -67,21 +81,18 @@ export default function RegistrationForm({ type }) {
     }
 
     const data = {};
-
     formData.forEach((v, k) => (data[k] = v));
-
     console.log("Form Data:", data);
-    // you can now send data to your API/backend
   };
 
-  // Clean up memory when component unmounts
+  // Cleanup preview URL
   useEffect(() => {
     return () => {
-      if (profilePreview) {
-        URL.revokeObjectURL(profilePreview);
+      if (user.profilePreview) {
+        URL.revokeObjectURL(user.profilePreview);
       }
     };
-  }, [profilePreview]);
+  }, [user.profilePreview]);
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -98,8 +109,8 @@ export default function RegistrationForm({ type }) {
                 name="userType"
                 value={type}
                 className="peer sr-only"
-                checked={userType === type}
-                onChange={handleUserTypeChange}
+                checked={user.userType === type}
+                onChange={handleChange}
               />
               <div className="hover:border-primary-300 dark:hover:border-primary-400 cursor-pointer rounded-lg border-2 border-gray-200 p-4 transition-all duration-200 peer-checked:border-primary-500 peer-checked:bg-primary-50 dark:border-gray-600 dark:peer-checked:bg-primary-900">
                 <div className="space-y-1 text-center">
@@ -123,6 +134,7 @@ export default function RegistrationForm({ type }) {
         </div>
       </div>
 
+      {/* Profile Picture */}
       <div>
         <label className="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
           Profile Picture
@@ -130,15 +142,13 @@ export default function RegistrationForm({ type }) {
         <div className="flex items-center justify-center space-x-6">
           <div className="shrink-0">
             <Image
-              id="profilePreview"
               className="h-20 w-20 rounded-full border-2 border-gray-300 object-cover dark:border-gray-600"
-              src={profilePreview || ImageAvatar}
+              src={user.profilePreview || ImageAvatar}
               alt="Profile preview"
               width={80}
               height={80}
             />
           </div>
-          {/* <!-- Upload Button --> */}
           <div className="max-w-xs flex-1">
             <label
               htmlFor="profilePicture"
@@ -154,13 +164,8 @@ export default function RegistrationForm({ type }) {
                 type="file"
                 className="sr-only"
                 accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const previewURL = URL.createObjectURL(file);
-                    setProfilePreview(previewURL);
-                  }
-                }}
+                ref={fileInputRef}
+                onChange={handleFileChange}
               />
             </label>
             <p className="mt-1 text-center text-xs text-gray-500 dark:text-gray-400">
@@ -174,71 +179,58 @@ export default function RegistrationForm({ type }) {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Left */}
         <div className="space-y-4">
-          {/* First Name */}
           <div>
-            <label
-              htmlFor="firstName"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               First Name
             </label>
             <input
-              id="firstName"
               name="firstName"
-              type="text"
+              value={user.firstName}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="John"
             />
           </div>
 
-          {/* Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Email
             </label>
             <input
-              id="email"
               name="email"
               type="email"
+              value={user.email}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="john@example.com"
             />
           </div>
 
-          {/* Address */}
           <div>
-            <label
-              htmlFor="address"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Address
             </label>
             <textarea
-              id="address"
               name="address"
+              value={user.address}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="Full address"
-            ></textarea>
+            />
           </div>
 
-          {/* Password */}
           <div>
-            <label
-              htmlFor="password"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Password
             </label>
             <input
-              id="password"
               name="password"
               type="password"
+              value={user.password}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="••••••••"
@@ -249,16 +241,13 @@ export default function RegistrationForm({ type }) {
         {/* Right */}
         <div className="space-y-4">
           <div>
-            <label
-              htmlFor="lastName"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Last Name
             </label>
             <input
-              id="lastName"
               name="lastName"
-              type="text"
+              value={user.lastName}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="Doe"
@@ -266,16 +255,14 @@ export default function RegistrationForm({ type }) {
           </div>
 
           <div>
-            <label
-              htmlFor="phone"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Phone Number
             </label>
             <input
-              id="phone"
               name="phone"
               type="tel"
+              value={user.phone}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="+880 …"
@@ -283,81 +270,65 @@ export default function RegistrationForm({ type }) {
           </div>
 
           <div>
-            <label
-              htmlFor="bio"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Bio
             </label>
             <textarea
-              id="bio"
               name="bio"
+              value={user.bio}
+              onChange={handleChange}
               maxLength="250"
               rows="3"
-              onInput={handleBioInput}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="Tell us about yourself..."
-            ></textarea>
-
+            />
             <div className="mt-1 flex items-center justify-between">
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 Brief description
               </p>
-              <span id="bioCounter" className="text-xs text-gray-400">
-                {bioLength}/250
-              </span>
+              <span className="text-xs text-gray-400">{bioLength}/250</span>
             </div>
           </div>
 
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Confirm Password
             </label>
             <input
-              id="confirmPassword"
               name="confirmPassword"
               type="password"
+              value={user.confirmPassword}
+              onChange={handleChange}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-              placeholder=""
             />
           </div>
         </div>
       </div>
 
-      {/* Farmer fields */}
-      {userType === "farmer" && (
+      {/* Farmer-specific fields */}
+      {user.userType === "farmer" && (
         <div className="space-y-4">
           <div>
-            <label
-              htmlFor="farmName"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Farm Name
             </label>
             <input
-              id="farmName"
               name="farmName"
-              type="text"
-              // required
+              value={user.farmName}
+              onChange={handleChange}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="Green Valley Farm"
             />
           </div>
           <div>
-            <label
-              htmlFor="specialization"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Specialization
             </label>
             <select
-              id="specialization"
               name="specialization"
-              // required
+              value={user.specialization}
+              onChange={handleChange}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
             >
               <option value="">Select specialization</option>
@@ -368,27 +339,25 @@ export default function RegistrationForm({ type }) {
               <option value="mixed">Mixed Farming</option>
             </select>
           </div>
-
           <div>
-            <label
-              htmlFor="farmSize"
-              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
+            <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
               Farm Size
             </label>
             <div className="flex space-x-2">
               <input
-                id="farmSize"
                 name="farmSize"
                 type="number"
                 min="0"
                 step="0.1"
+                value={user.farmSize}
+                onChange={handleChange}
                 className="flex-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                 placeholder="5.5"
               />
               <select
-                id="farmSizeUnit"
                 name="farmSizeUnit"
+                value={user.farmSizeUnit}
+                onChange={handleChange}
                 className="w-24 rounded-lg border border-gray-300 px-2 py-2 text-sm focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               >
                 <option value="acres">Acres</option>
@@ -404,19 +373,21 @@ export default function RegistrationForm({ type }) {
         </div>
       )}
 
+      {/* Terms */}
       <div className="flex items-start">
         <input
-          id="terms"
-          name="terms"
+          id="termsAccepted"
+          name="termsAccepted"
           type="checkbox"
+          value="true"
           required
           className="mt-1 h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
         />
         <label
-          htmlFor="terms"
+          htmlFor="termsAccepted"
           className="ml-2 text-sm text-gray-600 dark:text-gray-400"
         >
-          I agree to the
+          I agree to the{" "}
           <a href="#" className="text-primary-600 hover:text-primary-500">
             Terms and Conditions{" "}
           </a>
@@ -427,6 +398,7 @@ export default function RegistrationForm({ type }) {
         </label>
       </div>
 
+      {/* Submit */}
       <button
         type="submit"
         className="flex w-full items-center justify-center rounded bg-primary-600 py-3 text-white"

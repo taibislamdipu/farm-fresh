@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
   termsAccepted: {
     type: Boolean,
     required: true,
-    default: false, // Optional: helps avoid unexpected `undefined`
+    default: false,
   },
 
   // only for farmer
