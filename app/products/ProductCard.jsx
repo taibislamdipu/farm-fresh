@@ -19,7 +19,7 @@ export default function ProductCard({ product }) {
                 key={index}
                 className="rounded-full bg-green-500 px-2 py-1 text-xs font-medium capitalize text-white"
               >
-                {feature}
+                {feature.replace(/_/g, " ")}
               </span>
             ))}
           </div>
