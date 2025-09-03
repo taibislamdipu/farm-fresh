@@ -11,13 +11,22 @@ import mongoose from "mongoose";
 export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
   await connectMongo();
 
+  const sortOptions = {
+    featured: { _id: -1 },
+    price_low: { pricePerUnit: 1 },
+    price_high: { pricePerUnit: -1 },
+    newest: { harvestDate: -1 },
+    rating: { rating: -1 },
+  };
+
+  const sortQuery = sortOptions[filters.sort || "featured"];
+
   const skip = (page - 1) * limit;
 
-  // Build query object dynamically
   const query = {};
 
   if (filters.search) {
-    query.name = { $regex: filters.search, $options: "i" }; // case-insensitive
+    query.name = { $regex: filters.search, $options: "i" };
   }
 
   if (filters.category) {
@@ -30,7 +39,7 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
 
   const products = await productModel
     .find(query)
-    .sort({ _id: -1 }) // newest first
+    .sort(sortQuery)
     .skip(skip)
     .limit(limit)
     .lean();

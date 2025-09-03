@@ -10,10 +10,12 @@ export default async function ProductsPage({ searchParams }) {
   const page = parseInt(searchParams?.page) || 1;
   const search = searchParams?.search || "";
 
+  const sort = searchParams?.sort || "featured";
+
   const { products, total } = await getAllProducts({
     page,
     limit: 6,
-    filters: { search },
+    filters: { search, sort },
   });
 
   const totalPages = Math.ceil(total / 6);
