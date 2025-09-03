@@ -8,7 +8,14 @@ import ProductSort from "./ProductSort";
 
 export default async function ProductsPage({ searchParams }) {
   const page = parseInt(searchParams?.page) || 1;
-  const { products, total } = await getAllProducts({ page, limit: 6 });
+  const search = searchParams?.search || "";
+
+  const { products, total } = await getAllProducts({
+    page,
+    limit: 6,
+    filters: { search },
+  });
+
   const totalPages = Math.ceil(total / 6);
 
   return (
@@ -31,13 +38,17 @@ export default async function ProductsPage({ searchParams }) {
           <div className="lg:col-span-3">
             <ProductSort />
 
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products.slice(0, 6).map((product) => (
-                <Link href={`/details/${product.id}`} key={product.id}>
-                  <ProductCard product={product} />
-                </Link>
-              ))}
-            </div>
+            {products.length === 0 ? (
+              <p className="text-gray-500">No products found.</p>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {products.map((product) => (
+                  <Link href={`/details/${product.id}`} key={product.id}>
+                    <ProductCard product={product} />
+                  </Link>
+                ))}
+              </div>
+            )}
 
             <Pagination page={page} totalPages={totalPages} />
           </div>
