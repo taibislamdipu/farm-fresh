@@ -26,7 +26,11 @@ export default function Category({ categories }) {
       params.delete("category");
     }
 
-    params.set("page", 1); // reset page
+    // clear search when user clicks category
+    params.delete("search");
+
+    // reset page
+    params.set("page", 1);
     router.push(`/products?${params.toString()}`);
   };
 

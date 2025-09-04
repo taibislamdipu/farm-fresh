@@ -28,24 +28,30 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
     query.name = { $regex: filters.search, $options: "i" };
   }
 
-  // Filter by category (support multiple)
+  // Filter by category (support multiple, case-insensitive)
   if (filters.category) {
-    const categories = filters.category.split(",").map((c) => c.toLowerCase());
-    query.category = { $in: categories };
+    const categories = filters.category.split(",");
+    query.$or = categories.map((cat) => ({
+      category: { $regex: `^${cat}$`, $options: "i" },
+    }));
   }
 
   // Filter by status
   if (filters.status) {
     query.status = filters.status;
   }
+  if (filters.price) {
+    const [minStr, maxStr] = filters.price.split("-");
+    const min = minStr ? Number(minStr) : null;
+    const max = maxStr ? Number(maxStr) : null;
 
-  // Filter by price range (if you implement price filter)
-  if (filters.minPrice !== undefined) {
-    query.pricePerUnit = { $gte: filters.minPrice };
-  }
-  if (filters.maxPrice !== undefined) {
-    query.pricePerUnit = query.pricePerUnit || {};
-    query.pricePerUnit.$lte = filters.maxPrice;
+    if (min !== null && !isNaN(min)) {
+      query.pricePerUnit = { $gte: min };
+    }
+    if (max !== null && !isNaN(max)) {
+      query.pricePerUnit = query.pricePerUnit || {};
+      query.pricePerUnit.$lte = max;
+    }
   }
 
   const products = await productModel
