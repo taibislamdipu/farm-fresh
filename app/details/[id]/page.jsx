@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { getProductById } from "@/database/queries";
 import connectMongo from "@/dbConnect/mongo";
 import productModel from "@/models/product-model";
@@ -54,9 +53,8 @@ export default async function ProductDetails({ params: { id } }) {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
-          <ProductGallery images={product.images} />
+          {product?.images && <ProductGallery images={product?.images} />}
 
-          {/* <!-- Product Information --> */}
           <div className="space-y-6">
             <div>
               <div className="mb-2 flex flex-wrap items-center gap-2">

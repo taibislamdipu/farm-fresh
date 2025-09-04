@@ -11,7 +11,7 @@ export default function ProductsError({ error, reset }) {
       <p className="mb-4">{error?.message}</p>
       <button
         className="rounded bg-primary-600 px-4 py-2 text-white"
-        onClick={() => reset()} // retry the page
+        onClick={() => reset()}
       >
         Retry
       </button>

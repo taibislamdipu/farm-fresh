@@ -8,7 +8,6 @@ export default function ProductGallery({ images }) {
 
   return (
     <div className="space-y-4">
-      {/* Main image */}
       <div className="aspect-square overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800">
         <Image
           src={mainImage}
@@ -19,7 +18,6 @@ export default function ProductGallery({ images }) {
         />
       </div>
 
-      {/* Gallery */}
       <div className="grid grid-cols-5 gap-2">
         {images.slice(0, 5).map((img, idx) => (
           <button
