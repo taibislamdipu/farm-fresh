@@ -41,6 +41,8 @@ export default function SearchBar() {
           <option value="fruits">Fruits</option>
           <option value="grains">Grains</option>
           <option value="dairy">Dairy</option>
+          <option value="herbs">Herbs</option>
+          <option value="honey">Honey</option>
         </select>
         <button
           type="submit"
