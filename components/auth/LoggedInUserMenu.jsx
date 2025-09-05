@@ -43,7 +43,11 @@ export default function LoggedInUserMenu({ session }) {
         className="dark:hover:text-primary-400 flex items-center space-x-2 text-gray-700 hover:text-primary-600 dark:text-gray-300"
       >
         <Image
-          src={session?.user?.image}
+          src={
+            session?.user?.profilePicture
+              ? session.user.profilePicture
+              : session?.user?.image
+          }
           alt="User"
           className="h-8 w-8 rounded-full"
           width={32}

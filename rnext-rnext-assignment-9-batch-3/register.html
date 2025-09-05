@@ -161,13 +161,13 @@
                                 </div>
                                 <!-- Upload Button -->
                                 <div class="flex-1 max-w-xs">
-                                    <label for="profilePicture"
+                                    <label for="image"
                                         class="relative cursor-pointer bg-white dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 py-2 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500 transition block text-center">
                                         <span class="flex items-center justify-center">
                                             <i class="fas fa-camera mr-2"></i>
                                             Choose photo
                                         </span>
-                                        <input id="profilePicture" name="profilePicture" type="file" class="sr-only"
+                                        <input id="image" name="image" type="file" class="sr-only"
                                             accept="image/*" />
                                     </label>
                                     <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 text-center">
@@ -557,10 +557,10 @@
                 });
 
             // Profile picture preview functionality
-            const profilePictureInput = document.getElementById("profilePicture");
+            const imageInput = document.getElementById("image");
             const profilePreview = document.getElementById("profilePreview");
 
-            profilePictureInput.addEventListener("change", function (event) {
+            imageInput.addEventListener("change", function (event) {
                 const file = event.target.files[0];
                 if (file) {
                     // Validate file type

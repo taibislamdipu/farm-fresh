@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Suspense } from "react";
 import Logo from "../shared/Logo";
 import Cart from "./Cart";
-import DarkMode from "./DarkMode";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
 import SearchProduct from "./Search";
@@ -27,7 +26,7 @@ export default function Header() {
             </Suspense>
             <Cart />
             <UserMenu />
-            <DarkMode />
+            {/* <DarkMode /> */}
             <MobileMenu />
           </div>
         </div>

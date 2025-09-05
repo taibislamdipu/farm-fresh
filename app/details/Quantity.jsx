@@ -24,6 +24,7 @@ export default function Quantity({ product }) {
             value={quantity}
             min="1"
             max="50"
+            readOnly
             className="w-20 rounded-lg border border-gray-300 py-2 text-center focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           />
           <button

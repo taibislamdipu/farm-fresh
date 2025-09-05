@@ -4,6 +4,7 @@ import { login } from "@/app/actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { FaEye, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import SocialLogin from "./SocialLogin";
@@ -21,24 +22,26 @@ export default function LoginForm() {
       const res = await login(data);
 
       if (!!res.error) {
-        setError(res.error.message);
+        setError(res.error);
+        toast.error("Something went wrong");
       } else {
         router.push("/");
       }
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     }
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 py-8 px-6 shadow-xl rounded-2xl">
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+    <div className="rounded-2xl bg-white px-6 py-8 shadow-xl dark:bg-gray-800">
+      {error && <div className="mb-4 text-red-500">{error}</div>}
 
       <form className="space-y-6" onSubmit={onSubmit}>
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Email Address
           </label>
@@ -48,7 +51,7 @@ export default function LoginForm() {
               name="email"
               type="email"
               required
-              className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-3 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="john@example.com"
             />
             <MdEmail
@@ -61,7 +64,7 @@ export default function LoginForm() {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             Password
           </label>
@@ -71,7 +74,7 @@ export default function LoginForm() {
               name="password"
               type="password"
               required
-              className="w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              className="w-full rounded-lg border border-gray-300 py-3 pl-10 pr-10 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
               placeholder="••••••••"
             />
 
@@ -81,7 +84,7 @@ export default function LoginForm() {
             />
             <button
               type="button"
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute inset-y-0 right-0 flex items-center pr-3"
             >
               <FaEye className="text-gray-400 hover:text-gray-600" size={24} />
             </button>
@@ -94,7 +97,7 @@ export default function LoginForm() {
               id="remember"
               name="remember"
               type="checkbox"
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
             <label
               htmlFor="remember"
@@ -113,7 +116,7 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 px-4 rounded-lg font-medium transition duration-200 transform hover:scale-105"
+          className="w-full transform rounded-lg bg-primary-600 px-4 py-3 font-medium text-white transition duration-200 hover:scale-105 hover:bg-primary-700"
         >
           Sign In
         </button>
@@ -124,7 +127,7 @@ export default function LoginForm() {
             <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+            <span className="bg-white px-2 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
               Or continue with
             </span>
           </div>
@@ -139,7 +142,7 @@ export default function LoginForm() {
           Don't have an account?{" "}
           <Link
             href="/registration"
-            className="text-primary-600 hover:text-primary-500 font-medium"
+            className="font-medium text-primary-600 hover:text-primary-500"
           >
             Create account
           </Link>
