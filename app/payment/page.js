@@ -1,22 +1,27 @@
-import { auth } from "@/auth";
+"use client";
+import { useCart } from "@/app/context/cartContext";
+import Image from "next/image";
 import Breadcrumb from "../details/Breadcrumb";
 
-export default async function PaymentPage() {
-  const session = await auth();
-
-  console.log("session--->", session);
-
-  const isAuthenticated = true;
-
-  if (!isAuthenticated) {
-    return <div>PaymentPage</div>;
-  }
+export default function PaymentPage() {
+  const { cart } = useCart();
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
-    { label: "Product Details", href: "/details/68893f972a273fb13d0d308f" },
+    { label: "Cart", href: "/cart" },
     { label: "Payment" },
   ];
+
+  const subtotal = cart.reduce(
+    (total, item) => total + item.pricePerUnit * item.quantity,
+    0,
+  );
+  const deliveryFee = 50;
+  const serviceFee = 25;
+  const total = subtotal + deliveryFee + serviceFee;
+
+  if (cart.length === 0)
+    return <p className="p-6 text-center text-gray-500">Your cart is empty.</p>;
 
   return (
     <div>
@@ -24,101 +29,79 @@ export default async function PaymentPage() {
 
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          {/* <!-- Order Summary --> */}
+          {/* Order Summary */}
           <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
               Order Summary
             </h2>
 
-            {/* <!-- Product Details --> */}
-            <div className="mb-6 flex items-center space-x-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-700">
-              <img
-                src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=80&h=80&fit=crop"
-                alt="Fresh Tomatoes"
-                className="h-16 w-16 rounded-lg object-cover"
-              />
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 dark:text-white">
-                  Fresh Tomatoes
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  By Rahim's Farm
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Quantity: 5 kg
-                </p>
+            {cart.map((item) => (
+              <div
+                key={item.id}
+                className="mb-6 flex items-center space-x-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-700"
+              >
+                <Image
+                  src={item.images?.[0]}
+                  alt={item.name}
+                  width={64}
+                  height={64}
+                  className="h-16 w-16 rounded-lg object-cover"
+                />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    {item.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    By {item.harvestFrom || "Unknown Farm"}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Quantity: {item.quantity} kg
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold text-gray-900 dark:text-white">
+                    ৳{item.pricePerUnit * item.quantity}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    ৳{item.pricePerUnit}/kg
+                  </p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  ৳225
-                </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  ৳45/kg
-                </p>
-              </div>
-            </div>
+            ))}
 
-            {/* <!-- Booking Details --> */}
-            <div className="mb-6 space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  Booking Date:
-                </span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  Dec 20, 2024
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  Delivery Date:
-                </span>
-                <span className="font-medium text-gray-900 dark:text-white">
-                  Dec 22, 2024
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  Delivery Address:
-                </span>
-                <span className="text-right font-medium text-gray-900 dark:text-white">
-                  123 Main St, Dhaka
-                </span>
-              </div>
-            </div>
-
-            {/* <!-- Price Breakdown --> */}
             <div className="space-y-2 border-t border-gray-200 pt-4 dark:border-gray-600">
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-400">
                   Subtotal:
                 </span>
-                <span className="text-gray-900 dark:text-white">৳225</span>
+                <span className="text-gray-900 dark:text-white">
+                  ৳{subtotal}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-400">
                   Delivery Fee:
                 </span>
-                <span className="text-gray-900 dark:text-white">৳50</span>
+                <span className="text-gray-900 dark:text-white">
+                  ৳{deliveryFee}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-400">
                   Service Fee:
                 </span>
-                <span className="text-gray-900 dark:text-white">৳25</span>
+                <span className="text-gray-900 dark:text-white">
+                  ৳{serviceFee}
+                </span>
               </div>
               <div className="flex justify-between border-t border-gray-200 pt-2 text-lg font-bold text-gray-900 dark:border-gray-600 dark:text-white">
                 <span>Total:</span>
-                <span>৳300</span>
+                <span>৳{total}</span>
               </div>
             </div>
-
-            {/* <!-- Edit Button --> */}
-            <button className="mt-4 w-full rounded-lg bg-gray-200 py-2 font-medium text-gray-900 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
-              <i className="fas fa-edit mr-2"></i>Edit Order Details
-            </button>
           </div>
 
-          {/* <!-- Payment Form --> */}
+          {/* Payment Form */}
           <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
               Payment Information
@@ -170,7 +153,6 @@ export default async function PaymentPage() {
                   </label>
                 </div>
               </div>
-
               {/* <!-- Card Details --> */}
               <div id="cardDetails" className="space-y-4">
                 <div>
@@ -189,7 +171,6 @@ export default async function PaymentPage() {
                     placeholder="John Doe"
                   />
                 </div>
-
                 <div>
                   <label
                     htmlFor="cardNumber"
@@ -206,7 +187,6 @@ export default async function PaymentPage() {
                     placeholder="1234 5678 9012 3456"
                   />
                 </div>
-
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label
@@ -243,7 +223,6 @@ export default async function PaymentPage() {
                   </div>
                 </div>
               </div>
-
               {/* <!-- Mobile Payment Details --> */}
               <div id="mobileDetails" className="hidden space-y-4">
                 <div>
@@ -262,7 +241,6 @@ export default async function PaymentPage() {
                   />
                 </div>
               </div>
-
               {/* <!-- Billing Address --> */}
               <div>
                 <label className="mb-4 flex items-center">
@@ -277,20 +255,17 @@ export default async function PaymentPage() {
                 </label>
               </div>
 
-              {/* <!-- Submit Button --> */}
+              {/* <!-- Security Notice --> */}
+              <div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+                <i className="fas fa-shield-alt mr-2"></i> Your payment
+                information is secure and encrypted
+              </div>
               <button
                 type="submit"
                 className="w-full transform rounded-lg bg-primary-600 px-4 py-3 text-lg font-medium text-white transition duration-200 hover:scale-105 hover:bg-primary-700"
               >
-                <i className="fas fa-lock mr-2"></i>
-                Complete Payment - ৳300
+                Complete Payment - ৳{total}
               </button>
-
-              {/* <!-- Security Notice --> */}
-              <div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
-                <i className="fas fa-shield-alt mr-2"></i>
-                Your payment information is secure and encrypted
-              </div>
             </form>
           </div>
         </div>

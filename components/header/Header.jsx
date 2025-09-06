@@ -24,7 +24,9 @@ export default function Header() {
             <Suspense fallback={<div>Loading...</div>}>
               <SearchProduct />
             </Suspense>
-            <ShoppingCart />
+            <Link href="/cart">
+              <ShoppingCart />
+            </Link>
             <UserMenu />
             {/* <DarkMode /> */}
             <MobileMenu />

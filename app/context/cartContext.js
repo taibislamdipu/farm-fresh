@@ -33,33 +33,44 @@ export function CartProvider({ children }) {
     }
   }, [favorites, mounted]);
 
+  // Add/remove product from cart
   const toggleCart = (product) => {
     setCart((prev) => {
-      if (prev.some((item) => item.id === product.id)) {
+      const exists = prev.find((item) => item.id === product.id);
+      if (exists) {
+        // remove
         return prev.filter((item) => item.id !== product.id);
       } else {
-        return [...prev, product];
+        // add with default quantity 1
+        return [...prev, { ...product, quantity: 1 }];
       }
     });
   };
 
+  // Update quantity for a cart item
+  const updateQuantity = (productId, quantity) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === productId
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item,
+      ),
+    );
+  };
+
   const toggleFavorite = (productId) => {
-    setFavorites((prev) => {
-      if (prev.includes(productId)) {
-        return prev.filter((id) => id !== productId);
-      } else {
-        return [...prev, productId];
-      }
-    });
+    setFavorites((prev) =>
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId],
+    );
   };
 
   const isInCart = (productId) => cart.some((item) => item.id === productId);
   const isFavorite = (productId) => favorites.includes(productId);
 
-  // 🚀 Prevent hydration mismatch
-  if (!mounted) {
-    return null; // or return a loader/spinner
-  }
+  // Prevent hydration mismatch
+  if (!mounted) return null;
 
   return (
     <CartContext.Provider
@@ -68,6 +79,7 @@ export function CartProvider({ children }) {
         favorites,
         toggleCart,
         toggleFavorite,
+        updateQuantity,
         isInCart,
         isFavorite,
       }}
