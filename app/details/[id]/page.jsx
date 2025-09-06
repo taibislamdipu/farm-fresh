@@ -126,7 +126,6 @@ export default async function ProductDetails({ params: { id } }) {
                 </div>
               </div>
 
-              {/* <!-- Location --> */}
               <div className="mb-4 flex items-center text-gray-600 dark:text-gray-400">
                 <FaLocationDot className="mr-2" />
                 <span>{product.farmLocation}</span>
@@ -135,7 +134,6 @@ export default async function ProductDetails({ params: { id } }) {
 
             <Quantity product={product} />
 
-            {/* <!-- Action Buttons --> */}
             <div className="space-y-3">
               <Link href="/payment">
                 <button className="flex w-full items-center justify-center rounded-lg bg-primary-600 px-6 py-3 font-medium text-white shadow-md transition-all duration-200 hover:bg-primary-700 hover:shadow-lg dark:bg-primary-700 dark:hover:bg-primary-800">

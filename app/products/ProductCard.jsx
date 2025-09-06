@@ -1,7 +1,20 @@
+"use client";
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
 
 export default function ProductCard({ product }) {
+  const handleFavorite = (e) => {
+    e.stopPropagation(); // prevents link navigation
+    e.preventDefault(); // extra safe
+    alert("Favorite clicked" + product.name);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    alert("Add to cart clicked" + product.name);
+  };
   return (
     <div className="group overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-800">
       <div className="relative">
@@ -26,7 +39,10 @@ export default function ProductCard({ product }) {
         )}
 
         <div className="absolute right-3 top-3">
-          <button className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700">
+          <button
+            onClick={handleFavorite}
+            className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
+          >
             <FaHeart className="text-gray-600 dark:text-gray-400" />
           </button>
         </div>
@@ -59,7 +75,10 @@ export default function ProductCard({ product }) {
             Stock: {product.stock}kg
           </span>
         </div>
-        <button className="w-full rounded-lg bg-primary-600 py-2 font-medium text-white transition hover:bg-primary-700">
+        <button
+          onClick={(e) => handleAddToCart(e, product)}
+          className="w-full rounded-lg bg-primary-600 py-2 font-medium text-white transition hover:bg-primary-700"
+        >
           Add to Cart
         </button>
       </div>

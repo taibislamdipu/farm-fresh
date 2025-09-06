@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import Logo from "../shared/Logo";
-import Cart from "./Cart";
 import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
 import SearchProduct from "./Search";
+import ShoppingCart from "./ShoppingCart";
 import UserMenu from "./UserMenu";
 
 export default function Header() {
@@ -24,7 +24,7 @@ export default function Header() {
             <Suspense fallback={<div>Loading...</div>}>
               <SearchProduct />
             </Suspense>
-            <Cart />
+            <ShoppingCart />
             <UserMenu />
             {/* <DarkMode /> */}
             <MobileMenu />
