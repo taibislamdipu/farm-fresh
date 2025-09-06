@@ -1,16 +1,46 @@
 "use client";
+
 import { useCart } from "@/app/context/cartContext";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Breadcrumb from "../details/Breadcrumb";
 
 export default function PaymentPage() {
-  const { cart } = useCart();
+  const { cart, setPaymentInfo } = useCart();
+  const router = useRouter();
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Cart", href: "/cart" },
     { label: "Payment" },
   ];
+
+  const [formData, setFormData] = useState({
+    paymentMethod: "card",
+    cardName: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
+    mobileNumber: "",
+    sameAsDelivery: true,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Store payment info in context
+    setPaymentInfo(formData);
+    // Redirect to success page
+    router.push("/success");
+  };
 
   const subtotal = cart.reduce(
     (total, item) => total + item.pricePerUnit * item.quantity,
@@ -107,147 +137,161 @@ export default function PaymentPage() {
               Payment Information
             </h2>
 
-            <form className="space-y-6" action="success.html" method="POST">
-              {/* <!-- Payment Method --> */}
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              {/* Payment Method */}
               <div>
                 <label className="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Payment Method
                 </label>
                 <div className="space-y-3">
-                  <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="card"
-                      className="text-primary-600 focus:ring-primary-500"
-                      checked
-                    />
-                    <div className="ml-3 flex items-center">
-                      <i className="fas fa-credit-card mr-2 text-lg"></i>
-                      <span className="font-medium">Credit/Debit Card</span>
-                    </div>
-                  </label>
-                  <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="bkash"
-                      className="text-primary-600 focus:ring-primary-500"
-                    />
-                    <div className="ml-3 flex items-center">
-                      <i className="fas fa-mobile-alt mr-2 text-lg"></i>
-                      <span className="font-medium">bKash</span>
-                    </div>
-                  </label>
-                  <label className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
-                    <input
-                      type="radio"
-                      name="paymentMethod"
-                      value="nagad"
-                      className="text-primary-600 focus:ring-primary-500"
-                    />
-                    <div className="ml-3 flex items-center">
-                      <i className="fas fa-wallet mr-2 text-lg"></i>
-                      <span className="font-medium">Nagad</span>
-                    </div>
-                  </label>
+                  {["card", "bkash", "nagad"].map((method) => (
+                    <label
+                      key={method}
+                      className="flex cursor-pointer items-center rounded-lg border border-gray-300 p-3 hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={method}
+                        className="text-primary-600 focus:ring-primary-500"
+                        checked={formData.paymentMethod === method}
+                        onChange={handleChange}
+                      />
+                      <div className="ml-3 flex items-center">
+                        <i
+                          className={`mr-2 text-lg ${
+                            method === "card"
+                              ? "fas fa-credit-card"
+                              : method === "bkash"
+                                ? "fas fa-mobile-alt"
+                                : "fas fa-wallet"
+                          }`}
+                        ></i>
+                        <span className="font-medium">
+                          {method === "card"
+                            ? "Credit/Debit Card"
+                            : method.charAt(0).toUpperCase() + method.slice(1)}
+                        </span>
+                      </div>
+                    </label>
+                  ))}
                 </div>
               </div>
-              {/* <!-- Card Details --> */}
-              <div id="cardDetails" className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="cardName"
-                    className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Name on Card
-                  </label>
-                  <input
-                    type="text"
-                    id="cardName"
-                    name="cardName"
-                    required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="cardNumber"
-                    className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Card Number
-                  </label>
-                  <input
-                    type="text"
-                    id="cardNumber"
-                    name="cardNumber"
-                    required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    placeholder="1234 5678 9012 3456"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+
+              {/* Card Details */}
+              {formData.paymentMethod === "card" && (
+                <div id="cardDetails" className="space-y-4">
                   <div>
                     <label
-                      htmlFor="expiry"
+                      htmlFor="cardName"
                       className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
-                      Expiry Date
+                      Name on Card
                     </label>
                     <input
                       type="text"
-                      id="expiry"
-                      name="expiry"
+                      id="cardName"
+                      name="cardName"
+                      value={formData.cardName}
+                      onChange={handleChange}
                       required
                       className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                      placeholder="MM/YY"
+                      placeholder="John Doe"
                     />
                   </div>
                   <div>
                     <label
-                      htmlFor="cvv"
+                      htmlFor="cardNumber"
                       className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
-                      CVV
+                      Card Number
                     </label>
                     <input
-                      type="password"
-                      id="cvv"
-                      name="cvv"
-                      maxlength="4"
+                      type="text"
+                      id="cardNumber"
+                      name="cardNumber"
+                      value={formData.cardNumber}
+                      onChange={handleChange}
                       required
                       className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                      placeholder="123"
+                      placeholder="1234 5678 9012 3456"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="expiry"
+                        className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >
+                        Expiry Date
+                      </label>
+                      <input
+                        type="text"
+                        id="expiry"
+                        name="expiry"
+                        value={formData.expiry}
+                        onChange={handleChange}
+                        required
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        placeholder="MM/YY"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="cvv"
+                        className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                      >
+                        CVV
+                      </label>
+                      <input
+                        type="password"
+                        id="cvv"
+                        name="cvv"
+                        value={formData.cvv}
+                        onChange={handleChange}
+                        maxLength={4}
+                        required
+                        className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        placeholder="123"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Mobile Payment Details */}
+              {["bkash", "nagad"].includes(formData.paymentMethod) && (
+                <div id="mobileDetails" className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="mobileNumber"
+                      className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    >
+                      Mobile Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="mobileNumber"
+                      name="mobileNumber"
+                      value={formData.mobileNumber}
+                      onChange={handleChange}
+                      required
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                      placeholder="+880 1234 567890"
                     />
                   </div>
                 </div>
-              </div>
-              {/* <!-- Mobile Payment Details --> */}
-              <div id="mobileDetails" className="hidden space-y-4">
-                <div>
-                  <label
-                    htmlFor="mobileNumber"
-                    className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  >
-                    Mobile Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="mobileNumber"
-                    name="mobileNumber"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    placeholder="+880 1234 567890"
-                  />
-                </div>
-              </div>
-              {/* <!-- Billing Address --> */}
+              )}
+
+              {/* Billing Address */}
               <div>
                 <label className="mb-4 flex items-center">
                   <input
                     type="checkbox"
+                    name="sameAsDelivery"
+                    checked={formData.sameAsDelivery}
+                    onChange={handleChange}
                     className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                    checked
                   />
                   <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
                     Same as delivery address
@@ -255,11 +299,12 @@ export default function PaymentPage() {
                 </label>
               </div>
 
-              {/* <!-- Security Notice --> */}
+              {/* Security Notice */}
               <div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
                 <i className="fas fa-shield-alt mr-2"></i> Your payment
                 information is secure and encrypted
               </div>
+
               <button
                 type="submit"
                 className="w-full transform rounded-lg bg-primary-600 px-4 py-3 text-lg font-medium text-white transition duration-200 hover:scale-105 hover:bg-primary-700"

@@ -6,6 +6,7 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
+  const [paymentInfo, setPaymentInfo] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [mounted, setMounted] = useState(false);
 
@@ -82,6 +83,8 @@ export function CartProvider({ children }) {
         updateQuantity,
         isInCart,
         isFavorite,
+        paymentInfo,
+        setPaymentInfo,
       }}
     >
       {children}
