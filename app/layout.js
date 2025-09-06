@@ -3,6 +3,7 @@ import Header from "@/components/header/Header";
 import connectMongo from "@/dbConnect/mongo";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
+import { CartProvider } from "./context/cartContext";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -30,8 +31,10 @@ export default async function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100`}
       >
         <Toaster position="top-center" reverseOrder={false} />
-        <Header />
-        {children}
+        <CartProvider>
+          <Header />
+          {children}
+        </CartProvider>
         <Footer />
       </body>
     </html>
