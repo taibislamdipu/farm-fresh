@@ -1,6 +1,11 @@
+import { auth } from "@/auth";
 import Breadcrumb from "../details/Breadcrumb";
 
-export default function PaymentPage() {
+export default async function PaymentPage() {
+  const session = await auth();
+
+  console.log("session--->", session);
+
   const isAuthenticated = true;
 
   if (!isAuthenticated) {

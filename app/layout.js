@@ -1,6 +1,7 @@
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import connectMongo from "@/dbConnect/mongo";
+import { SessionProvider } from "next-auth/react";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "./context/cartContext";
@@ -31,10 +32,12 @@ export default async function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100`}
       >
         <Toaster position="top-center" reverseOrder={false} />
-        <CartProvider>
-          <Header />
-          {children}
-        </CartProvider>
+        <SessionProvider>
+          <CartProvider>
+            <Header />
+            {children}
+          </CartProvider>
+        </SessionProvider>
         <Footer />
       </body>
     </html>
