@@ -1,54 +1,64 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
+  const { data: session } = useSession();
   const [cart, setCart] = useState([]);
-  const [paymentInfo, setPaymentInfo] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [paymentInfo, setPaymentInfo] = useState(null); // include payment info
   const [mounted, setMounted] = useState(false);
 
-  // Only run on client
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    const storedFavorites = localStorage.getItem("favorites");
+  const userKey = session?.user?.email;
 
-    if (storedCart) setCart(JSON.parse(storedCart));
-    if (storedFavorites) setFavorites(JSON.parse(storedFavorites));
+  // Load user-specific data
+  useEffect(() => {
+    if (!userKey) {
+      setCart([]);
+      setFavorites([]);
+      setPaymentInfo(null); // reset on logout
+      setMounted(true);
+      return;
+    }
+
+    const storedCart = localStorage.getItem(`cart_${userKey}`);
+    const storedFavorites = localStorage.getItem(`favorites_${userKey}`);
+    const storedPayment = localStorage.getItem(`payment_${userKey}`);
+
+    setCart(storedCart ? JSON.parse(storedCart) : []);
+    setFavorites(storedFavorites ? JSON.parse(storedFavorites) : []);
+    setPaymentInfo(storedPayment ? JSON.parse(storedPayment) : null);
 
     setMounted(true);
-  }, []);
+  }, [userKey]);
 
-  // Save to localStorage
+  // Save user-specific data
   useEffect(() => {
-    if (mounted) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart, mounted]);
+    if (mounted && userKey)
+      localStorage.setItem(`cart_${userKey}`, JSON.stringify(cart));
+  }, [cart, mounted, userKey]);
 
   useEffect(() => {
-    if (mounted) {
-      localStorage.setItem("favorites", JSON.stringify(favorites));
-    }
-  }, [favorites, mounted]);
+    if (mounted && userKey)
+      localStorage.setItem(`favorites_${userKey}`, JSON.stringify(favorites));
+  }, [favorites, mounted, userKey]);
 
-  // Add/remove product from cart
+  useEffect(() => {
+    if (mounted && userKey)
+      localStorage.setItem(`payment_${userKey}`, JSON.stringify(paymentInfo));
+  }, [paymentInfo, mounted, userKey]);
+
   const toggleCart = (product) => {
     setCart((prev) => {
       const exists = prev.find((item) => item.id === product.id);
-      if (exists) {
-        // remove
-        return prev.filter((item) => item.id !== product.id);
-      } else {
-        // add with default quantity 1
-        return [...prev, { ...product, quantity: 1 }];
-      }
+      if (exists) return prev.filter((item) => item.id !== product.id);
+      return [...prev, { ...product, quantity: 1 }];
     });
   };
 
-  // Update quantity for a cart item
   const updateQuantity = (productId, quantity) => {
     setCart((prev) =>
       prev.map((item) =>
@@ -70,7 +80,6 @@ export function CartProvider({ children }) {
   const isInCart = (productId) => cart.some((item) => item.id === productId);
   const isFavorite = (productId) => favorites.includes(productId);
 
-  // Prevent hydration mismatch
   if (!mounted) return null;
 
   return (
