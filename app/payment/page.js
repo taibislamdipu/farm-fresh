@@ -126,7 +126,7 @@ export default function PaymentPage() {
               </div>
               <div className="flex justify-between border-t border-gray-200 pt-2 text-lg font-bold text-gray-900 dark:border-gray-600 dark:text-white">
                 <span>Total:</span>
-                <span>৳{total}</span>
+                <span>৳{total.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -309,7 +309,7 @@ export default function PaymentPage() {
                 type="submit"
                 className="w-full transform rounded-lg bg-primary-600 px-4 py-3 text-lg font-medium text-white transition duration-200 hover:scale-105 hover:bg-primary-700"
               >
-                Complete Payment - ৳{total}
+                Complete Payment - ৳{total.toFixed(2)}
               </button>
             </form>
           </div>
