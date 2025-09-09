@@ -7,7 +7,7 @@ import { useCart } from "../context/cartContext";
 export default function ProductCard({ product }) {
   const { toggleCart, toggleFavorite, isInCart, isFavorite, cart } = useCart();
 
-  console.log("cart--->", cart);
+  // console.log("cart--->", cart);
 
   return (
     <div className="group overflow-hidden rounded-2xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-800">
