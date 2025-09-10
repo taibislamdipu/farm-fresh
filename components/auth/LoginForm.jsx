@@ -106,12 +106,12 @@ export default function LoginForm() {
               Remember me
             </label>
           </div>
-          <a
-            href="forgot-password.html"
+          <Link
+            href="/forgot-password"
             className="text-sm text-primary-600 hover:text-primary-500"
           >
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         <button
