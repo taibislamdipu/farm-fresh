@@ -1,11 +1,11 @@
 "use client";
 
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import Logout from "./Logout";
 
 export default function LoggedInUserMenu({ session }) {
   const [open, setOpen] = useState(false);
@@ -30,11 +30,11 @@ export default function LoggedInUserMenu({ session }) {
     setOpen(false);
   }, [pathname]);
 
-  const handleLogout = async (e) => {
-    e.stopPropagation();
-    setOpen(false);
-    await signOut({ callbackUrl: "/login" });
-  };
+  // const handleLogout = async (e) => {
+  //   e.stopPropagation();
+  //   setOpen(false);
+  //   await signOut({ callbackUrl: "/login" });
+  // };
 
   return (
     <div ref={menuRef} className="relative inline-block text-left">
@@ -63,12 +63,7 @@ export default function LoggedInUserMenu({ session }) {
             <div className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
               <Link href="/manage-product">Manage Listings</Link>
             </div>
-            <div
-              className="cursor-pointer px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-              onClick={handleLogout}
-            >
-              Logout
-            </div>
+            <Logout setOpen={setOpen} />
           </div>
         </div>
       )}
