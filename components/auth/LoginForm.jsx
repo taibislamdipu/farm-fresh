@@ -121,7 +121,6 @@ export default function LoginForm() {
           Sign In
         </button>
 
-        {/* <!-- Divider --> */}
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
@@ -136,7 +135,6 @@ export default function LoginForm() {
         <SocialLogin />
       </form>
 
-      {/* <!-- Register Link --> */}
       <div className="mt-6 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?{" "}

@@ -30,12 +30,6 @@ export default function LoggedInUserMenu({ session }) {
     setOpen(false);
   }, [pathname]);
 
-  // const handleLogout = async (e) => {
-  //   e.stopPropagation();
-  //   setOpen(false);
-  //   await signOut({ callbackUrl: "/login" });
-  // };
-
   return (
     <div ref={menuRef} className="relative inline-block text-left">
       <button
