@@ -58,6 +58,7 @@ export const {
       if (user) {
         token.id = user.id;
         token.profilePicture = user.profilePicture || null;
+        token.userType = user.userType || "customer";
       }
       return token;
     },
@@ -65,6 +66,7 @@ export const {
       if (token) {
         session.user.id = token.id;
         session.user.profilePicture = token.profilePicture;
+        session.user.userType = token.userType;
       }
       return session;
     },

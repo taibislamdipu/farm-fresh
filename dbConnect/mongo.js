@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 const MONGODB_CONNECTION_STRING = process.env.MONGODB_CONNECTION_STRING;
 const cached = {};
-async function connectMongo() {
+async function dbConnect() {
   if (!MONGODB_CONNECTION_STRING) {
     throw new Error(
-      "Please define the MONGODB_CONNECTION_STRING environment variable inside .env.local"
+      "Please define the MONGODB_CONNECTION_STRING environment variable inside .env.local",
     );
   }
   if (cached.connection) {
@@ -25,4 +25,4 @@ async function connectMongo() {
   }
   return cached.connection;
 }
-export default connectMongo;
+export default dbConnect;

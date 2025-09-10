@@ -1,6 +1,6 @@
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
-import connectMongo from "@/dbConnect/mongo";
+import dbConnect from "@/dbConnect/mongo";
 import { SessionProvider } from "next-auth/react";
 import localFont from "next/font/local";
 import { Toaster } from "react-hot-toast";
@@ -24,7 +24,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  await connectMongo();
+  await dbConnect();
 
   return (
     <html lang="en">

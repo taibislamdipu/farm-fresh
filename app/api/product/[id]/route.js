@@ -1,10 +1,10 @@
-import connectMongo from "@/dbConnect/mongo";
+import dbConnect from "@/dbConnect/mongo";
 import cloudinary from "@/lib/cloudinary";
 import productModel from "@/models/product-model";
 import { NextResponse } from "next/server";
 
 export const PATCH = async (req, { params }) => {
-  await connectMongo();
+  await dbConnect();
 
   try {
     const formData = await req.formData();
@@ -75,7 +75,7 @@ export const PATCH = async (req, { params }) => {
 };
 
 export const DELETE = async (req, { params }) => {
-  await connectMongo();
+  await dbConnect();
   const { id } = params;
 
   if (!id) {

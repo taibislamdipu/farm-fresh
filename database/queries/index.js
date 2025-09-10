@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 
-import connectMongo from "@/dbConnect/mongo";
+import dbConnect from "@/dbConnect/mongo";
 import productModel from "@/models/product-model";
+import userModel from "@/models/user-model";
 import {
   replaceMongoIdInArray,
   replaceMongoIdInObject,
@@ -9,7 +10,7 @@ import {
 import mongoose from "mongoose";
 
 export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
-  await connectMongo();
+  await dbConnect();
 
   const sortOptions = {
     featured: { _id: -1 },
@@ -70,13 +71,13 @@ export async function getAllProducts({ page = 1, limit = 6, filters = {} }) {
 }
 
 export async function getProductsByCategory(category) {
-  await connectMongo();
+  await dbConnect();
   const products = await productModel.find({ category }).lean();
   return replaceMongoIdInArray(products);
 }
 
 export async function getCategoriesWithCounts() {
-  await connectMongo();
+  await dbConnect();
 
   const categories = [
     "vegetables",
@@ -100,7 +101,7 @@ export async function getCategoriesWithCounts() {
 }
 
 export async function getProductById(id) {
-  await connectMongo();
+  await dbConnect();
 
   // Validate the id
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -117,7 +118,13 @@ export async function getProductById(id) {
 }
 
 export async function getAllProductsByFarmerId(farmerId) {
-  await connectMongo();
+  await dbConnect();
   const products = await productModel.find({ farmerId }).lean();
   return replaceMongoIdInArray(products);
+}
+
+export async function getUserById(id) {
+  await dbConnect();
+  const user = await userModel.findById(id).lean();
+  console.log("user--->", user);
 }

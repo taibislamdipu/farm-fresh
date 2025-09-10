@@ -1,10 +1,10 @@
-import connectMongo from "@/dbConnect/mongo";
+import dbConnect from "@/dbConnect/mongo";
 import cloudinary from "@/lib/cloudinary";
 import productModel from "@/models/product-model";
 import { NextResponse } from "next/server";
 
 export const POST = async (req) => {
-  await connectMongo();
+  await dbConnect();
 
   const formData = await req.formData();
 

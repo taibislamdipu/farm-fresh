@@ -1,5 +1,5 @@
 import { getProductById } from "@/database/queries";
-import connectMongo from "@/dbConnect/mongo";
+import dbConnect from "@/dbConnect/mongo";
 import productModel from "@/models/product-model";
 import Link from "next/link";
 import { FaBolt, FaStar } from "react-icons/fa";
@@ -10,7 +10,7 @@ import Quantity from "../Quantity";
 import RelatedProducts from "../RelatedProducts";
 
 export async function generateStaticParams() {
-  await connectMongo();
+  await dbConnect();
 
   const products = await productModel.find({}, { _id: 1 }).lean();
 
