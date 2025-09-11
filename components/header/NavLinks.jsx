@@ -45,11 +45,14 @@ export default function NavLinks() {
 
       {userType === "farmer" ? (
         <>
-          <Link href="/add-product" className={getLinkClass("/add-product")}>
+          <Link
+            href="/manage-product/create"
+            className={getLinkClass("/add-product")}
+          >
             Add Product
           </Link>
           <Link
-            href="/manage-products"
+            href="/manage-product"
             className={getLinkClass("/manage-products")}
           >
             Manage Products
