@@ -9,6 +9,18 @@ import ProductGallery from "../ProductGallery";
 import Quantity from "../Quantity";
 import RelatedProducts from "../RelatedProducts";
 
+export async function generateMetadata({ params }) {
+  await dbConnect();
+  const product = await productModel.findById(params.id).lean();
+
+  return {
+    title: product ? `${product.name} - FarmFresh` : "FarmFresh",
+    description: product
+      ? `${product.description}`
+      : "Connect directly with local farmers and get the freshest produce delivered to your doorstep",
+  };
+}
+
 export async function generateStaticParams() {
   await dbConnect();
 

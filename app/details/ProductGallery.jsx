@@ -15,6 +15,7 @@ export default function ProductGallery({ images }) {
           className="h-full w-full object-cover"
           width={600}
           height={600}
+          draggable={false}
         />
       </div>
 
@@ -29,10 +30,13 @@ export default function ProductGallery({ images }) {
                 : "border-transparent hover:border-primary-500"
             } bg-white dark:bg-gray-800`}
           >
-            <img
+            <Image
               src={img}
               alt={`Product ${idx + 1}`}
               className="h-full w-full object-cover"
+              width={200}
+              height={200}
+              draggable={false}
             />
           </button>
         ))}
