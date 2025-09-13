@@ -128,3 +128,9 @@ export async function getUserById(id) {
   const user = await userModel.findById(id).lean();
   console.log("user--->", user);
 }
+
+export async function getAllFarmers() {
+  await dbConnect();
+  const farmers = await userModel.find({ userType: "farmer" }).lean();
+  return replaceMongoIdInArray(farmers);
+}
