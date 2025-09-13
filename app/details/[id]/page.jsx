@@ -4,6 +4,8 @@ import productModel from "@/models/product-model";
 import Link from "next/link";
 import { FaBolt, FaStar } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import AddToCart from "../AddToCart";
+import AddToFavorite from "../AddToFavorite";
 import Breadcrumb from "../Breadcrumb";
 import ProductGallery from "../ProductGallery";
 import Quantity from "../Quantity";
@@ -153,14 +155,8 @@ export default async function ProductDetails({ params: { id } }) {
                   Buy Now
                 </button>
               </Link>
-              <button className="w-full rounded-lg bg-gray-200 px-6 py-3 font-medium text-gray-900 transition hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600">
-                <i className="fas fa-shopping-cart mr-2"></i>
-                Add to Cart
-              </button>
-              <button className="w-full rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-900 transition hover:bg-gray-50 dark:border-gray-600 dark:text-white dark:hover:bg-gray-800">
-                <i className="far fa-heart mr-2"></i>
-                Add to Favorite
-              </button>
+              <AddToCart product={product} />
+              <AddToFavorite product={product} />
             </div>
 
             {/* <!-- Farmer Contact --> */}
