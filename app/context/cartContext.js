@@ -80,6 +80,8 @@ export function CartProvider({ children }) {
   const isInCart = (productId) => cart.some((item) => item.id === productId);
   const isFavorite = (productId) => favorites.includes(productId);
 
+  const totalItems = cart?.reduce((acc, item) => acc + item.quantity, 0);
+
   if (!mounted) return null;
 
   return (
@@ -94,6 +96,7 @@ export function CartProvider({ children }) {
         isFavorite,
         paymentInfo,
         setPaymentInfo,
+        totalItems,
       }}
     >
       {children}

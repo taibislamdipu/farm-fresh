@@ -1,17 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import { useCart } from "../context/cartContext";
 
 export default function Quantity({ product }) {
-  const [quantity, setQuantity] = useState(1);
+  const { updateQuantity } = useCart();
+  const [quantity, setQuantity] = useState(product.quantity || 1);
   const maxQuantity = 50;
+
+  // sync local state if product.quantity changes (for example when user comes back to cart)
+  useEffect(() => {
+    setQuantity(product.quantity || 1);
+  }, [product.quantity]);
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
-      toast.success("Product removed from cart");
+      const newQty = quantity - 1;
+      setQuantity(newQty);
+      updateQuantity(product.id, newQty);
+      toast.success("Product quantity decreased");
     } else {
       toast.error("Quantity cannot be less than 1");
     }
@@ -19,8 +28,10 @@ export default function Quantity({ product }) {
 
   const increaseQuantity = () => {
     if (quantity < maxQuantity) {
-      setQuantity(quantity + 1);
-      toast.success("Product added to cart");
+      const newQty = quantity + 1;
+      setQuantity(newQty);
+      updateQuantity(product.id, newQty);
+      toast.success("Product quantity increased");
     } else {
       toast.error(`You can order a maximum of ${maxQuantity}`);
     }
